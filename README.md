@@ -1,3 +1,3 @@
 # EKSwiftSuite
 
-A description of this package.
+Useful Swift helpers and UI elements that will make your life easier every day.
