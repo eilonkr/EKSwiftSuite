@@ -15,5 +15,6 @@ final class SmartPressGestureRecogizer: UILongPressGestureRecognizer {
     init(target: Any?, action: Selector?, minimumPressDuration: TimeInterval = 0.0) {
         super.init(target: target, action: action)
         self.minimumPressDuration = minimumPressDuration
+        self.cancelsTouchesInView = false
     }
 }
