@@ -24,7 +24,7 @@ let package = Package(
         .target(
             name: "EKSwiftSuite",
             dependencies: [],
-            resources: [.copy("Resources")]
+            resources: [.process("Resources")]
         ),
         .testTarget(
             name: "EKSwiftSuiteTests",

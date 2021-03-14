@@ -7,7 +7,7 @@
 
 import UIKit
 
-open class EKLoadingViewController: UIViewController {
+public class EKLoadingViewController: UIViewController {
     
     let style: Style
     let indicatorStyle: UIActivityIndicatorView.Style
@@ -30,7 +30,7 @@ open class EKLoadingViewController: UIViewController {
         self.backgroundOpacity = backgroundOpacity
         self.infoText = infoText
         
-        super.init(nibName: nil, bundle: .module)
+        super.init(nibName: nil, bundle: Bundle.module)
         setupTransition()
     }
     
