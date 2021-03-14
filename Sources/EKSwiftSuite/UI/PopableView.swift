@@ -7,11 +7,11 @@
 
 import UIKit
 
-protocol PopableView: UIView {
-    func addPopOnTap()
+public protocol PopableView: UIView {
+    func addPopOnTap(alphaLevel: CGFloat, scaleAmount: CGFloat, animationDuration: TimeInterval)
 }
 
-extension UIView {
+public extension UIView {
     func addPopOnTap(alphaLevel: CGFloat = 0.5, scaleAmount: CGFloat = 0.94, animationDuration: TimeInterval = 0.15) {
         precondition(self is PopableView, "Calling `addPopOnTap()` on non-protocol member.")
         isUserInteractionEnabled = true
