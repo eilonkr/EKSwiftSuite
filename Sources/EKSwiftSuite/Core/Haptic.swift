@@ -1,10 +1,3 @@
-//
-//  Haptic.swift
-//  Haptica
-//
-//  Created by Lasha Efremidze on 4/7/17.
-//  Copyright © 2017 efremidze. All rights reserved.
-//
 
 import UIKit
 
