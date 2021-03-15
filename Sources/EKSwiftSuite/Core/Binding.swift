@@ -8,7 +8,7 @@
 import Foundation
 
 open class Binding<T> {
-    typealias Handler = (T) -> Void
+    public typealias Handler = (T) -> Void
     
     public var value: T {
         didSet {
