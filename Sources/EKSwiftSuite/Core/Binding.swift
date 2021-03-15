@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class Binding<T> {
+open class Binding<T> {
     typealias Handler = (T) -> Void
     
     public var value: T {
