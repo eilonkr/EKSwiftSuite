@@ -31,12 +31,12 @@ public extension UIView {
         let animDuration = gesture.args["animationDuration"] as! TimeInterval
         
         if gesture.state == .began {
-            UIView.animate(withDuration: animDuration, delay: 0) {
+            UIView.animate(withDuration: animDuration, delay: 0, options: .allowUserInteraction) {
                 self.transform = .evenScale(scaleAmount)
                 self.alpha = alphaLevel
             }
         } else if gesture.state == .ended {
-            UIView.animate(withDuration: animDuration, delay: 0) {
+            UIView.animate(withDuration: animDuration, delay: 0, options: .allowUserInteraction) {
                 self.transform = .identity
                 self.alpha = 1.0
             }
