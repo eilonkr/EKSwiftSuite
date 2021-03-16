@@ -15,7 +15,7 @@ public extension UIView {
     func addPopOnTap(alphaLevel: CGFloat = 0.5, scaleAmount: CGFloat = 0.94, animationDuration: TimeInterval = 0.15) {
         assert(self is PopableView, "Calling `addPopOnTap()` on non-protocol member.")
         isUserInteractionEnabled = true
-        let longTap = SmartPressGestureRecogizer(target: self, action: #selector(handleTap))
+        let longTap = SmartPressGestureRecogizer(target: self, action: #selector(handleTap), minimumPressDuration: 0.0)
         longTap.args = [
             "alphaLevel"        : alphaLevel,
             "scaleAmount"       : scaleAmount,
