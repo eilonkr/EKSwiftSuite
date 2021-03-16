@@ -26,6 +26,7 @@ public extension UIView {
     }
     
     @objc private func handleTap(gesture: SmartPressGestureRecogizer) {
+        print(gesture.minimumPressDuration)
         let alphaLevel   = gesture.args["alphaLevel"] as! CGFloat
         let scaleAmount  = gesture.args["scaleAmount"] as! CGFloat
         let animDuration = gesture.args["animationDuration"] as! TimeInterval
