@@ -16,7 +16,6 @@ public extension UIView {
         assert(self is PopableView, "Calling `addPopOnTap()` on non-protocol member.")
         isUserInteractionEnabled = true
         let longTap = SmartPressGestureRecogizer(target: self, action: #selector(handleTap), minimumPressDuration: 0.0)
-        longTap.minimumPressDuration = 0
         longTap.args = [
             "alphaLevel"        : alphaLevel,
             "scaleAmount"       : scaleAmount,
@@ -36,7 +35,8 @@ public extension UIView {
                 self.transform = .evenScale(scaleAmount)
                 self.alpha = alphaLevel
             }
-        } else if gesture.state == .ended {
+        }
+        else if gesture.state != .changed || gesture.state == .ended || gesture.state == .cancelled {
             UIView.animate(withDuration: animDuration, delay: 0, options: .allowUserInteraction) {
                 self.transform = .identity
                 self.alpha = 1.0
