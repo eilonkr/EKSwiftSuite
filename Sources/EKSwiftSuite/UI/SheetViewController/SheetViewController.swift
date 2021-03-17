@@ -23,6 +23,14 @@ open class SheetViewController: UIViewController {
         let backgroundDimColor: UIColor
         let backgroundDimLevel: CGFloat
         let closeImage: UIImage
+        
+        public init(tintColor: UIColor, backgroundColor: UIColor, backgroundDimColor: UIColor, backgroundDimLevel: CGFloat, closeImage: UIImage) {
+            self.tintColor = tintColor
+            self.backgroundColor = backgroundColor
+            self.backgroundDimColor = backgroundDimColor
+            self.backgroundDimLevel = backgroundDimLevel
+            self.closeImage = closeImage
+        }
     }
 
     private let transition = SheetTransition()
@@ -33,7 +41,7 @@ open class SheetViewController: UIViewController {
     
     weak var output: SheetViewControllerOutput?
     
-    init(contentView: UIView, appearance: Appearance, output: SheetViewControllerOutput?) {
+    public init(contentView: UIView, appearance: Appearance, output: SheetViewControllerOutput?) {
         self.contentView = contentView
         self.appearance = appearance
         self.output = output
