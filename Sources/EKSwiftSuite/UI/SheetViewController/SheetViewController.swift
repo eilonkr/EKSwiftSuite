@@ -7,17 +7,17 @@
 
 import UIKit
 
-enum DismissState {
+public enum DismissState {
     case closeButtonTap
     case dimmedViewTap
 }
 
-protocol SheetViewControllerOutput: AnyObject {
+public protocol SheetViewControllerOutput: AnyObject {
     func sheetViewController(_ controller: SheetViewController, wantsDismissAt dismissState: DismissState)
 }
 
 open class SheetViewController: UIViewController {
-    struct Appearance {
+    public struct Appearance {
         let tintColor: UIColor
         let backgroundColor: UIColor
         let backgroundDimColor: UIColor
