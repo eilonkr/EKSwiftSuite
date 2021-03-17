@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AutoSizingTableView: UITableView {
+open class AutoSizingTableView: UITableView {
     override func reloadData() {
         super.reloadData()
         self.invalidateIntrinsicContentSize()
