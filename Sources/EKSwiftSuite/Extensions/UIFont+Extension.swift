@@ -5,7 +5,7 @@
 //  Created by Eilon Krauthammer on 17/03/2021.
 //
 
-import Foundation
+import UIKit
 
 public extension UIFont {
     static func roundedFont(size: CGFloat, weight: UIFont.Weight) -> UIFont {
