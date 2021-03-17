@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import EKSwiftSuite
 
 enum DismissState {
     case closeButtonTap
@@ -17,7 +16,7 @@ protocol SheetViewControllerOutput: AnyObject {
     func sheetViewController(_ controller: SheetViewController, wantsDismissAt dismissState: DismissState)
 }
 
-class SheetViewController: UIViewController {
+open class SheetViewController: UIViewController {
     struct Appearance {
         let tintColor: UIColor
         let backgroundColor: UIColor
@@ -42,7 +41,7 @@ class SheetViewController: UIViewController {
         commonInit()
     }
     
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         contentView = .init()
         appearance = .init(tintColor: .systemBlue, backgroundColor: .white, backgroundDimColor: .white, backgroundDimLevel: 0.34, closeImage: .init())
         super.init(coder: coder)
@@ -54,7 +53,7 @@ class SheetViewController: UIViewController {
         modalPresentationStyle = .overFullScreen
     }
     
-    override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = appearance.backgroundDimColor.withAlphaComponent(appearance.backgroundDimLevel)
         

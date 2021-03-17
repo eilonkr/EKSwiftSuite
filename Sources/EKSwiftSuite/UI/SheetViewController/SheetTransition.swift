@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class SheetTransition: NSObject, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning{
+open class SheetTransition: NSObject, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning{
     
     private var isPresent = false
     
@@ -25,11 +25,11 @@ final class SheetTransition: NSObject, UIViewControllerTransitioningDelegate, UI
     
     // MARK: - UIViewControllerAnimatedTransitioning
     
-    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+    public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.225
     }
     
-    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+    public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         if isPresent {
             animatePresentTransition(transitionContext: transitionContext)
         } else {
