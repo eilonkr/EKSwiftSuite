@@ -7,7 +7,7 @@
 
 import UIKit
 
-open class PopButton: UIButton, PopableView {
+open class SpringButton: UIButton, SpringableView {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -24,6 +24,6 @@ open class PopButton: UIButton, PopableView {
     }
     
     func configurePop() {
-        addPopOnTap()
+        addSpringOnTap()
     }
 }
