@@ -10,13 +10,13 @@ import Foundation
 open class Binding<T> {
     public typealias Handler = (T) -> Void
     
-    public var handlers: [Handler] = []
+    public var handlers: [Handler?] = []
     
     public var value: T {
         didSet {
             handler?(value)
             for handler in handlers {
-                handler(value)
+                handler?(value)
             }
         }
     }
@@ -32,7 +32,8 @@ open class Binding<T> {
         self.handler = handler
     }
     
-    public func add(_ handler: @escaping Handler) {
+    public func add(_ handler: Handler?) {
+        handler?(value)
         handlers.append(handler)
     }
 }
