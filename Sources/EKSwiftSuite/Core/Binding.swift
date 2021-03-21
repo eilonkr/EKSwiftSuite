@@ -10,7 +10,7 @@ import Foundation
 open class Binding<T> {
     public typealias Handler = (T) -> Void
     
-    private var handlers: [Handler] = []
+    public var handlers: [Handler] = []
     
     public var value: T {
         didSet {
