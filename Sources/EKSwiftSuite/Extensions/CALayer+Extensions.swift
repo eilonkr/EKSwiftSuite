@@ -3,7 +3,7 @@ import UIKit
 
 public extension CALayer {
 
-    func roundCorners(to radius: CornerRadiusStyle, smoothCorners: Bool = true) {
+    func roundCorners(to radius: CornerRadiusStyle, masking: CornerRadiusStyle.Masking? = nil, smoothCorners: Bool = true) {
         switch radius {
             case .rounded:
                 cornerRadius = min(bounds.height/2, bounds.width/2)
@@ -11,6 +11,25 @@ public extension CALayer {
                 cornerRadius = rad
             case .other(let view):
                 cornerRadius = view.layer.cornerRadius
+        }
+        
+        if let masking = masking, #available(iOS 13.0, *) {
+            switch masking {
+                case .topHorizontal:
+                    maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+                case .bottomHorizontal:
+                    maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+                case .leftVertical:
+                    maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+                case .rightVertical:
+                    maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+                case .leftToRightDiagonal:
+                    maskedCorners = [.layerMinXMinYCorner, .layerMaxXMaxYCorner]
+                case .rightToLeftDiagnonal:
+                    maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMinYCorner]
+                case .custom(let cornerMask):
+                    maskedCorners = cornerMask
+            }
         }
         
         if bounds.width == bounds.height && radius == .rounded { return }

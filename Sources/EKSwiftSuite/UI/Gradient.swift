@@ -41,5 +41,12 @@ public struct Gradient {
     public static func solid(_ color: UIColor) -> Gradient {
         Gradient(direction: .horizontal, colors: [color])
     }
+    
+    public static func fade(direction: Gradient.Direction, startColor: UIColor) -> Gradient {
+        Gradient(direction: direction, colors: [
+            startColor,
+            startColor.withAlphaComponent(0.0)
+        ])
+    }
 }
 
