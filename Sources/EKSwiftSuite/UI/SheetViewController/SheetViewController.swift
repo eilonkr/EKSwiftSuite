@@ -64,8 +64,8 @@ open class SheetViewController: UIViewController {
     open override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = appearance.backgroundDimColor.withAlphaComponent(appearance.backgroundDimLevel)
-        view.clipsToBounds = true
         contentContainerView.backgroundColor = appearance.backgroundColor
+        contentContainerView.clipsToBounds = true
         contentView.backgroundColor = .clear
         
         configureContentView()
