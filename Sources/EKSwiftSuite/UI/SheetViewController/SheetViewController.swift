@@ -66,7 +66,7 @@ open class SheetViewController: UIViewController {
         let backgroundColor = appearance.backgroundDimColor.withAlphaComponent(appearance.backgroundDimLevel)
         view.backgroundColor = backgroundColor
         contentContainerView.backgroundColor = backgroundColor
-        contentView.backgroundColor = nil
+        contentView.backgroundColor = backgroundColor
         
         configureContentView()
         configureCloseButton()
