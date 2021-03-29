@@ -66,6 +66,7 @@ open class SheetViewController: UIViewController {
         view.backgroundColor = appearance.backgroundDimColor.withAlphaComponent(appearance.backgroundDimLevel)
         contentContainerView.backgroundColor = appearance.backgroundColor
         contentContainerView.clipsToBounds = true
+        contentContainerView.roundCorners(to: .custom(28.0))
         contentView.backgroundColor = .clear
         
         configureContentView()
