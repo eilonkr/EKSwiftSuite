@@ -7,12 +7,12 @@
 
 import UIKit
 
-struct Animation {
+public struct Animation {
     let duration: TimeInterval
     let closure: (UIView) -> Void
 }
 
-extension Animation {
+public extension Animation {
     static func fadeIn(duration: TimeInterval) -> Animation {
         return Animation(duration: duration) { view in
             view.alpha = 1.0

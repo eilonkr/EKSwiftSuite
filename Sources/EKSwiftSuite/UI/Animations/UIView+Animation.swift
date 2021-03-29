@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UIView {
+public extension UIView {
     func animateInOrder(_ animations: [Animation]) {
         guard !animations.isEmpty else { return }
         
@@ -30,5 +30,18 @@ extension UIView {
                 animation.closure(self)
             }
         }
+    }
+}
+
+// ––––– Usage Example –––––
+
+extension UIView {
+    func animateBackAndForthToDisappear() {
+        animateInOrder([
+            .scale(to: .evenScale(1.2), duration: 0.1),
+            .scale(to: .evenScale(0.8), duration: 0.1),
+            .scale(to: .identity, duration: 1.0),
+            .fadeOut(duration: 2.0)
+        ])
     }
 }
