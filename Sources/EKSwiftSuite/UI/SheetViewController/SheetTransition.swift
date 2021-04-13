@@ -26,7 +26,7 @@ open class SheetTransition: NSObject, UIViewControllerTransitioningDelegate, UIV
     // MARK: - UIViewControllerAnimatedTransitioning
     
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.225
+        return 0.5
     }
     
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -57,16 +57,15 @@ open class SheetTransition: NSObject, UIViewControllerTransitioningDelegate, UIV
         
         let height = to.contentContainerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         to.contentContainerView.transform = .init(translationX: 0, y: height)
-
-        UIView.animate(withDuration: self.transitionDuration(using: transitionContext), animations: {
+        
+        UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.6, options: .curveEaseInOut) {
             to.contentContainerView.transform = .identity
             to.view.backgroundColor = to.appearance.backgroundDimColor.withAlphaComponent(to.appearance.backgroundDimLevel)
             to.view.layoutIfNeeded()
             from.view.layoutIfNeeded()
-        }, completion: {
-            finished in
+        } completion: { _ in
             transitionContext.completeTransition(true)
-        })
+        }
 
     }
     
