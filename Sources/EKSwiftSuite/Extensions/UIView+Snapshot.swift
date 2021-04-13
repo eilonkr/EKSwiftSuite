@@ -12,9 +12,9 @@ public extension UIView {
     /// Use the preparation closure to configure the view before and after the snapshot was taken.
     func makeSnapshot(for subframe: CGRect? = nil, using preparation: ((Bool) -> Void)?) -> UIImage {
         preparation?(true)
-        let renderer = UIGraphicsImageRenderer(bounds: subframe ?? bounds)
+        let renderer = UIGraphicsImageRenderer(size: subframe?.size ?? bounds.size)
         let snapshotImage = renderer.image { context in
-            drawHierarchy(in: bounds, afterScreenUpdates: true)
+            drawHierarchy(in: subframe ?? bounds, afterScreenUpdates: true)
         }
         
         preparation?(false)
