@@ -42,7 +42,10 @@ open class SheetViewController: UIViewController {
     let contentContainerView: UIView = UIView()
     let contentView: UIView
     
-    private lazy var dismissYOffset: CGFloat = contentView.frame.height * 0.5
+    private lazy var dismissYOffset: CGFloat = contentView.frame.height * 0.4
+    private let minimumDismissVelocity: CGFloat = 1300.0
+    private var isDismissingByVelocity: Bool = false
+    
     private lazy var dismissHandle: UIView = {
         let view = UIView()
         view.frame.size = .init(width: 32.0, height: 4)
@@ -138,20 +141,24 @@ open class SheetViewController: UIViewController {
         tapGesture.delegate = self
         view.addGestureRecognizer(tapGesture)
     }
-    
+
     @objc private func contentViewPanned(_ panGesture: UIPanGestureRecognizer) {
         guard isSwipeDismissEnabled else { return }
         
         switch panGesture.state {
             case .changed:
-                let velocityY = panGesture.velocity(in: contentContainerView).y
-                print(velocityY)
+                if panGesture.velocity(in: contentContainerView).y >= minimumDismissVelocity {
+                    isDismissingByVelocity = true
+                    return
+                }
+                
                 let translationY = panGesture.translation(in: contentContainerView).y
                 contentContainerView.transform.ty += translationY
                 panGesture.setTranslation(.zero, in: contentView)
                 
             case .ended, .cancelled:
-                if contentContainerView.transform.ty >= dismissYOffset {
+                defer { isDismissingByVelocity = false }
+                if contentContainerView.transform.ty >= dismissYOffset || isDismissingByVelocity {
                     UIView.animate(withDuration: 0.3) {
                         self.contentContainerView.transform.ty = self.contentContainerView.frame.height + 1
                     } completion: { _ in
