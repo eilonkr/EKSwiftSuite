@@ -112,8 +112,9 @@ open class SheetViewController: UIViewController {
         view.addSubview(contentContainerView)
         NSLayoutConstraint.activate([
             contentContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            contentContainerView.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 8.0),
             contentContainerView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            contentContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            contentContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
         
         contentView.fix(in: contentContainerView)
