@@ -65,7 +65,7 @@ open class SheetTransition: NSObject, UIViewControllerTransitioningDelegate, UIV
         let height = to.contentContainerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         to.contentContainerView.transform = .init(translationX: 0, y: height)
         
-        UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.8, options: .curveEaseInOut) {
+        UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.8, options: [.curveEaseInOut, .allowUserInteraction]) {
             to.contentContainerView.transform = .identity
             to.view.backgroundColor = to.appearance.backgroundDimColor.withAlphaComponent(to.appearance.backgroundDimLevel)
             to.view.layoutIfNeeded()
@@ -86,7 +86,7 @@ open class SheetTransition: NSObject, UIViewControllerTransitioningDelegate, UIV
         from.view.layoutIfNeeded()
         to.view.layoutIfNeeded()
         
-        UIView.animate(withDuration: self.transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut) {
+        UIView.animate(withDuration: self.transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [.curveEaseInOut, .allowUserInteraction]) {
             from.view.backgroundColor = from.appearance.backgroundDimColor.withAlphaComponent(0)
             from.view.backgroundColor = .clear
             containerView.transform = .init(translationX: 0, y: containerView.frame.height)
