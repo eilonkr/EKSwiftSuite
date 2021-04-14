@@ -144,6 +144,8 @@ open class SheetViewController: UIViewController {
         
         switch panGesture.state {
             case .changed:
+                let velocityY = panGesture.velocity(in: contentContainerView).y
+                print(velocityY)
                 let translationY = panGesture.translation(in: contentContainerView).y
                 contentContainerView.transform.ty += translationY
                 panGesture.setTranslation(.zero, in: contentView)
