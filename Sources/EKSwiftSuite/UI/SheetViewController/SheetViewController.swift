@@ -43,6 +43,14 @@ open class SheetViewController: UIViewController {
     let contentView: UIView
     
     private lazy var dismissYOffset: CGFloat = contentView.frame.height * 0.5
+    private lazy var dismissHandle: UIView = {
+        let view = UIView()
+        view.frame.size = .init(width: 100.0, height: 10.0)
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.1)
+        view.center.x = contentContainerView.center.x
+        view.frame.origin.y = 12.0
+        return view
+    }()
     
     weak var output: SheetViewControllerOutput?
     
@@ -84,6 +92,17 @@ open class SheetViewController: UIViewController {
         configureSwipeGesture()
     }
     
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if isSwipeDismissEnabled {
+            dismissHandle.alpha = 0.0
+            contentContainerView.addSubview(dismissHandle)
+            UIView.animate(withDuration: 0.2) {
+                self.dismissHandle.alpha = 1.0
+            }
+        }
+    }
+    
     private func configureContentView() {
         contentContainerView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(contentContainerView)
@@ -110,7 +129,7 @@ open class SheetViewController: UIViewController {
     
     private func configureSwipeGesture() {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(contentViewPanned))
-        contentContainerView.addGestureRecognizer(pan)
+        contentContainerView.addGestureRecognizer(pan)=
     }
     
     private func configureDismissTapGesture() {
@@ -125,6 +144,7 @@ open class SheetViewController: UIViewController {
         switch panGesture.state {
             case .changed:
                 let translationY = panGesture.translation(in: contentContainerView).y
+                guard translationY < 0 else { return }
                 contentContainerView.transform.ty += translationY
                 panGesture.setTranslation(.zero, in: contentView)
                 
