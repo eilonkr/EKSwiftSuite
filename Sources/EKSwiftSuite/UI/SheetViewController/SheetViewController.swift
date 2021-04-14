@@ -46,8 +46,8 @@ open class SheetViewController: UIViewController {
     private lazy var dismissHandle: UIView = {
         let view = UIView()
         view.frame.size = .init(width: 42.0, height: 4)
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.15)
-        view.layer.cornerRadius = 1.5
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        view.layer.cornerRadius = 2
         view.center.x = contentContainerView.center.x
         view.frame.origin.y = 16.0
         return view
