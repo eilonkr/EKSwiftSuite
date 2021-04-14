@@ -11,6 +11,13 @@ open class SheetTransition: NSObject, UIViewControllerTransitioningDelegate, UIV
     
     private var isPresent = false
     
+    private let duration: TimeInterval
+    
+    init(duration: TimeInterval) {
+        self.duration = duration
+        super.init()
+    }
+    
     // MARK: - UIViewControllerTransitioningDelegate
     
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
@@ -26,7 +33,7 @@ open class SheetTransition: NSObject, UIViewControllerTransitioningDelegate, UIV
     // MARK: - UIViewControllerAnimatedTransitioning
     
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.42
+        return duration
     }
     
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -79,7 +86,7 @@ open class SheetTransition: NSObject, UIViewControllerTransitioningDelegate, UIV
         from.view.layoutIfNeeded()
         to.view.layoutIfNeeded()
         
-        UIView.animate(withDuration: self.transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.8, options: .curveEaseInOut) {
+        UIView.animate(withDuration: self.transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut) {
             from.view.backgroundColor = from.appearance.backgroundDimColor.withAlphaComponent(0)
             from.view.backgroundColor = .clear
             containerView.transform = .init(translationX: 0, y: containerView.frame.height)

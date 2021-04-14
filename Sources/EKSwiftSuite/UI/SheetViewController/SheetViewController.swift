@@ -33,17 +33,19 @@ open class SheetViewController: UIViewController {
         }
     }
 
-    private let transition = SheetTransition()
+    private lazy var transition = SheetTransition(duration: transitionDuration)
     
     let appearance: Appearance
+    let transitionDuration: TimeInterval
     let contentContainerView: UIView = UIView()
     let contentView: UIView
     
     weak var output: SheetViewControllerOutput?
     
-    public init(contentView: UIView, appearance: Appearance, output: SheetViewControllerOutput?) {
+    public init(contentView: UIView, appearance: Appearance, transitionDuration: TimeInterval = 0.42, output: SheetViewControllerOutput?) {
         self.contentView = contentView
         self.appearance = appearance
+        self.transitionDuration = transitionDuration
         self.output = output
         super.init(nibName: nil, bundle: nil)
         commonInit()
@@ -52,6 +54,7 @@ open class SheetViewController: UIViewController {
     required public init?(coder: NSCoder) {
         contentView = .init()
         appearance = .init(tintColor: .systemBlue, backgroundColor: .white, backgroundDimColor: .white, backgroundDimLevel: 0.34, closeImage: .init())
+        transitionDuration = 0.42
         super.init(coder: coder)
         commonInit()
     }
