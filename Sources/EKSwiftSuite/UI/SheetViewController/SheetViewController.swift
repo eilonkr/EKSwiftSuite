@@ -129,7 +129,7 @@ open class SheetViewController: UIViewController {
     
     private func configureSwipeGesture() {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(contentViewPanned))
-        contentContainerView.addGestureRecognizer(pan)=
+        contentContainerView.addGestureRecognizer(pan)
     }
     
     private func configureDismissTapGesture() {
