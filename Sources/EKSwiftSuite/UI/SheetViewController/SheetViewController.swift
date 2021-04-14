@@ -110,7 +110,7 @@ open class SheetViewController: UIViewController {
     
     private func configureSwipeGesture() {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(contentViewPanned))
-        contentView.addGestureRecognizer(pan)
+        contentContainerView.addGestureRecognizer(pan)
     }
     
     private func configureDismissTapGesture() {
@@ -124,20 +124,20 @@ open class SheetViewController: UIViewController {
         
         switch panGesture.state {
             case .changed:
-                let translationY = panGesture.translation(in: contentView).y
-                contentView.transform.ty += translationY
+                let translationY = panGesture.translation(in: contentContainerView).y
+                contentContainerView.transform.ty += translationY
                 panGesture.setTranslation(.zero, in: contentView)
                 
             case .ended, .cancelled:
-                if contentView.transform.ty >= dismissYOffset {
+                if contentContainerView.transform.ty >= dismissYOffset {
                     UIView.animate(withDuration: 0.3) {
-                        self.contentView.transform.ty = self.contentView.frame.height + 1
+                        self.contentContainerView.transform.ty = self.contentContainerView.frame.height + 1
                     } completion: { _ in
                         self.output?.sheetViewController(self, wantsDismissAt: .swipeAway)
                     }
                 } else {
                     UIView.animate(withDuration: 0.3) {
-                        self.contentView.transform = .identity
+                        self.contentContainerView.transform = .identity
                     }
                 }
                 
