@@ -14,7 +14,7 @@ public extension UIView {
         preparation?(true)
         let renderer = UIGraphicsImageRenderer(bounds: subframe ?? bounds)
         let snapshotImage = renderer.image { context in
-            drawHierarchy(in: bounds, afterScreenUpdates: true)
+            layer.render(in: context.cgContext)
         }
         
         preparation?(false)
