@@ -43,7 +43,7 @@ open class SheetViewController: UIViewController {
     let contentView: UIView
     
     private lazy var dismissYOffset: CGFloat = contentView.frame.height * 0.4
-    private let minimumDismissVelocity: CGFloat = 1300.0
+    private let minimumDismissVelocity: CGFloat = 1500.0
     private var isDismissingByVelocity: Bool = false
     
     private lazy var dismissHandle: UIView = {
@@ -149,7 +149,6 @@ open class SheetViewController: UIViewController {
             case .changed:
                 if panGesture.velocity(in: contentContainerView).y >= minimumDismissVelocity {
                     isDismissingByVelocity = true
-                    return
                 }
                 
                 let translationY = panGesture.translation(in: contentContainerView).y
