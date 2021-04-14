@@ -45,10 +45,11 @@ open class SheetViewController: UIViewController {
     private lazy var dismissYOffset: CGFloat = contentView.frame.height * 0.5
     private lazy var dismissHandle: UIView = {
         let view = UIView()
-        view.frame.size = .init(width: 100.0, height: 10.0)
+        view.frame.size = .init(width: 100.0, height: 3.0)
         view.backgroundColor = UIColor.black.withAlphaComponent(0.1)
+        view.layer.cornerRadius = 1.5
         view.center.x = contentContainerView.center.x
-        view.frame.origin.y = 12.0
+        view.frame.origin.y = 16.0
         return view
     }()
     
@@ -144,7 +145,6 @@ open class SheetViewController: UIViewController {
         switch panGesture.state {
             case .changed:
                 let translationY = panGesture.translation(in: contentContainerView).y
-                guard translationY < 0 else { return }
                 contentContainerView.transform.ty += translationY
                 panGesture.setTranslation(.zero, in: contentView)
                 
