@@ -136,7 +136,7 @@ open class SheetViewController: UIViewController {
                         self.output?.sheetViewController(self, wantsDismissAt: .swipeAway)
                     }
                 } else {
-                    UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.8, options: .curveEaseInOut) {
+                    UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.8, options: [.curveEaseInOut, .allowUserInteraction]) {
                         self.contentContainerView.transform = .identity
                     }
                 }
