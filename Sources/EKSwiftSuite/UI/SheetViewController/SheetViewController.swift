@@ -10,6 +10,7 @@ import UIKit
 public enum DismissState {
     case closeButtonTap
     case dimmedViewTap
+    case swipeAway
 }
 
 public protocol SheetViewControllerOutput: AnyObject {
@@ -37,15 +38,19 @@ open class SheetViewController: UIViewController {
     
     let appearance: Appearance
     let transitionDuration: TimeInterval
+    let isSwipeDismissEnabled: Bool
     let contentContainerView: UIView = UIView()
     let contentView: UIView
     
+    private lazy var dismissYOffset: CGFloat = contentView.frame.height * 0.5
+    
     weak var output: SheetViewControllerOutput?
     
-    public init(contentView: UIView, appearance: Appearance, transitionDuration: TimeInterval = 0.42, output: SheetViewControllerOutput?) {
+    public init(contentView: UIView, appearance: Appearance, transitionDuration: TimeInterval = 0.42, isSwipeDismissEnabled: Bool = false, output: SheetViewControllerOutput?) {
         self.contentView = contentView
         self.appearance = appearance
         self.transitionDuration = transitionDuration
+        self.isSwipeDismissEnabled = isSwipeDismissEnabled
         self.output = output
         super.init(nibName: nil, bundle: nil)
         commonInit()
@@ -55,6 +60,7 @@ open class SheetViewController: UIViewController {
         contentView = .init()
         appearance = .init(tintColor: .systemBlue, backgroundColor: .white, backgroundDimColor: .white, backgroundDimLevel: 0.34, closeImage: .init())
         transitionDuration = 0.42
+        isSwipeDismissEnabled = false
         super.init(coder: coder)
         commonInit()
     }
@@ -75,6 +81,7 @@ open class SheetViewController: UIViewController {
         configureContentView()
         configureCloseButton()
         configureDismissTapGesture()
+        configureSwipeGesture()
     }
     
     private func configureContentView() {
@@ -101,10 +108,42 @@ open class SheetViewController: UIViewController {
         closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
     }
     
+    private func configureSwipeGesture() {
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(contentViewPanned))
+        contentView.addGestureRecognizer(pan)
+    }
+    
     private func configureDismissTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dimmedViewTapped))
         tapGesture.delegate = self
         view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func contentViewPanned(_ panGesture: UIPanGestureRecognizer) {
+        guard isSwipeDismissEnabled else { return }
+        
+        switch panGesture.state {
+            case .changed:
+                let translationY = panGesture.translation(in: contentView).y
+                contentView.transform.ty += translationY
+                panGesture.setTranslation(.zero, in: contentView)
+                
+            case .ended, .cancelled:
+                if contentView.transform.ty >= dismissYOffset {
+                    UIView.animate(withDuration: 0.3) {
+                        self.contentView.transform.ty = self.contentView.frame.height + 1
+                    } completion: { _ in
+                        self.output?.sheetViewController(self, wantsDismissAt: .swipeAway)
+                    }
+                } else {
+                    UIView.animate(withDuration: 0.3) {
+                        self.contentView.transform = .identity
+                    }
+                }
+                
+            default:
+                return
+        }
     }
     
     @objc private func closeTapped() {
