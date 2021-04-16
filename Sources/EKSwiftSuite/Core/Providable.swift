@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol Providable {
+public protocol Providable {
     associatedtype Item
     func provide(_ item: Item)
 }

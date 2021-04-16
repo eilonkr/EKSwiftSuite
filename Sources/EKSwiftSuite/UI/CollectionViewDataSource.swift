@@ -7,26 +7,27 @@
 
 import UIKit
 
-class CollectionViewDataSource<Cell: UICollectionViewCell & Providable>: NSObject, UICollectionViewDataSource {
+open class CollectionViewDataSource<Cell: UICollectionViewCell & Providable>: NSObject, UICollectionViewDataSource {
     
-    typealias Item = Cell.Item
+    public typealias Item = Cell.Item
     
     public var onChange: (() -> Void)?
     
     public var items: [Item] = [] {
         didSet { onChange?() }
     }
+    
     private let reuseIdentifier: String
     
-    init(reuseIdentifier: String) {
+    public init(reuseIdentifier: String) {
         self.reuseIdentifier = reuseIdentifier
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return items.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! Cell
         cell.provide(items[indexPath.item])
         return cell
