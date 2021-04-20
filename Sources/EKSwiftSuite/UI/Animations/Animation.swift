@@ -10,7 +10,7 @@ import UIKit
 public struct Animation {
     let duration: TimeInterval
     let closure: (UIView) -> Void
-    public init(duration: TimeInterval, closure: (UIView) -> Void) {
+    public init(duration: TimeInterval, closure: @escaping (UIView) -> Void) {
         self.duration = duration
         self.closure = closure
     }
