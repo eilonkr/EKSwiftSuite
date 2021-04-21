@@ -11,6 +11,7 @@ open class CollectionViewDataSource<Cell: UICollectionViewCell & Providable>: NS
     
     public typealias Item = Cell.Item
     
+    public var cellConfigurator: ((Cell) -> Void)?
     public var onChange: (() -> Void)?
     
     public var items: [Item] = [] {
@@ -30,6 +31,7 @@ open class CollectionViewDataSource<Cell: UICollectionViewCell & Providable>: NS
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! Cell
         cell.provide(items[indexPath.item])
+        cellConfigurator?(cell)
         return cell
     }
 }
