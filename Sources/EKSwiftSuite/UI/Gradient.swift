@@ -7,8 +7,25 @@
 
 import UIKit
 
-public struct Gradient {
-    public enum Direction {
+public struct Gradient: Equatable {
+    public enum Direction: Equatable {
+        public static func == (lhs: Gradient.Direction, rhs: Gradient.Direction) -> Bool {
+            switch (lhs, rhs) {
+                case (.vertical, .vertical):
+                    return true
+                case (.horizontal, .horizontal):
+                    return true
+                case (.diagonalLTR, .diagonalLTR):
+                    return true
+                case (diagonalRTL, .diagonalRTL):
+                    return true
+                case (.custom(let p1), .custom(let p2)):
+                    return p1 == p2
+                default:
+                    return false
+            }
+        }
+        
         case vertical, horizontal, diagonalLTR, diagonalRTL
         case custom((CGPoint, CGPoint))
         
