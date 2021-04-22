@@ -7,7 +7,7 @@
 
 import UIKit
 
-open class EKLoadingViewController: UIViewController {
+open class LoadingViewController: UIViewController {
     
     let style: Style
     let indicatorStyle: UIActivityIndicatorView.Style
@@ -24,7 +24,7 @@ open class EKLoadingViewController: UIViewController {
         return stack
     }()
     
-    public init(style: Style = .default, indicatorStyle: UIActivityIndicatorView.Style, backgroundOpacity: CGFloat = 0.75, infoText: String? = nil) {
+    public init(style: Style = .default, indicatorStyle: UIActivityIndicatorView.Style = .medium, backgroundOpacity: CGFloat = 0.75, infoText: String? = nil) {
         self.style = style
         self.indicatorStyle = indicatorStyle
         self.backgroundOpacity = backgroundOpacity
@@ -78,7 +78,7 @@ open class EKLoadingViewController: UIViewController {
 
 // MARK: - Style
 
-public extension EKLoadingViewController {
+public extension LoadingViewController {
     enum Style {
         case `default`
         case light
@@ -109,13 +109,14 @@ public extension EKLoadingViewController {
 // MARK: - Global Presentation
 
 public extension UIViewController {
-    func startLoadingInterface(style: EKLoadingViewController.Style = .default, indicatorStyle: UIActivityIndicatorView.Style, backgroundOpacity: CGFloat = 0.75, infoText: String? = nil) {
-        let loadingViewController = EKLoadingViewController(style: style, indicatorStyle: indicatorStyle, backgroundOpacity: backgroundOpacity, infoText: infoText)
+    func startLoadingInterface(style: LoadingViewController.Style = .default, indicatorStyle: UIActivityIndicatorView.Style = .medium, backgroundOpacity: CGFloat = 0.75, infoText: String? = nil) {
+        guard !(presentedViewController is LoadingViewController) else { return }
+        let loadingViewController = LoadingViewController(style: style, indicatorStyle: indicatorStyle, backgroundOpacity: backgroundOpacity, infoText: infoText)
         present(loadingViewController, animated: true, completion: nil)
     }
     
     func stopLoadingInterface(completion: (() -> Void)? = nil, rootDismiss: Bool = false) {
-        if let child = children.first(where: { $0 is EKLoadingViewController }) as? EKLoadingViewController {
+        if let child = children.first(where: { $0 is LoadingViewController }) as? LoadingViewController {
             let dismisser = rootDismiss ? self : child
             dismisser.dismiss(animated: true, completion: completion)
         }
