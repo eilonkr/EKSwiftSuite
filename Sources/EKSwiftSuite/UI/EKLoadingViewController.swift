@@ -116,8 +116,8 @@ public extension UIViewController {
     }
     
     func stopLoadingInterface(completion: (() -> Void)? = nil, rootDismiss: Bool = false) {
-        if let child = children.first(where: { $0 is LoadingViewController }) as? LoadingViewController {
-            let dismisser = rootDismiss ? self : child
+        if let loadingViewController = presentedViewController as? LoadingViewController {
+            let dismisser = rootDismiss ? self : loadingViewController
             dismisser.dismiss(animated: true, completion: completion)
         }
     }
