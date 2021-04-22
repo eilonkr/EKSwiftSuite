@@ -8,7 +8,30 @@
 import UIKit
 
 public struct Gradient: Equatable {
-    public enum Direction: Equatable {
+    public var direction: Direction
+    public var colors: [UIColor]
+    public var locations: [NSNumber]?
+    
+    public init(direction: Gradient.Direction, colors: [UIColor], locations: [NSNumber]? = nil) {
+        self.direction = direction
+        self.colors = colors
+        self.locations = locations
+    }
+    
+    public static func solid(_ color: UIColor) -> Gradient {
+        Gradient(direction: .horizontal, colors: [color])
+    }
+    
+    public static func fade(direction: Gradient.Direction, startColor: UIColor) -> Gradient {
+        Gradient(direction: direction, colors: [
+            startColor,
+            startColor.withAlphaComponent(0.0)
+        ])
+    }
+}
+
+public extension Gradient {
+    enum Direction: Equatable {
         public static func == (lhs: Gradient.Direction, rhs: Gradient.Direction) -> Bool {
             switch (lhs, rhs) {
                 case (.vertical, .vertical):
@@ -43,27 +66,6 @@ public struct Gradient: Equatable {
                     return (points.0, points.1)
             }
         }
-    }
-    
-    public var direction: Direction
-    public var colors: [UIColor]
-    public var locations: [NSNumber]?
-    
-    public init(direction: Gradient.Direction, colors: [UIColor], locations: [NSNumber]? = nil) {
-        self.direction = direction
-        self.colors = colors
-        self.locations = locations
-    }
-    
-    public static func solid(_ color: UIColor) -> Gradient {
-        Gradient(direction: .horizontal, colors: [color])
-    }
-    
-    public static func fade(direction: Gradient.Direction, startColor: UIColor) -> Gradient {
-        Gradient(direction: direction, colors: [
-            startColor,
-            startColor.withAlphaComponent(0.0)
-        ])
     }
 }
 
