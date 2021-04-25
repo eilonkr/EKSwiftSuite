@@ -28,30 +28,24 @@ public struct Archiver<D: Directory> {
     public init(_ directory: D) {
         self.directory = directory
     }
-    
-    private var pathPrefix: String { "documents" }
-    
-    var baseURL: URL {
-        FileManager.default.urls(for: .documentDirectory, in: .allDomainsMask).first!.appendingPathComponent(pathPrefix).appendingPathComponent(directory.url.path)
-    }
-    
+        
     public func itemExists(forKey key: String) -> Bool {
-        FileManager.default.fileExists(atPath: baseURL.appendingPathComponent(fn(key)).path)
+        FileManager.default.fileExists(atPath: self.directory.url.appendingPathComponent(fn(key)).path)
     }
     
     public func put<T: ArchiveItem>(_ item: T) throws {
-        if !FileManager.default.fileExists(atPath: directory.url.path) {
+        if !FileManager.default.fileExists(atPath: directory.path) {
             // Directory doesn't exist.
             try createDirectory()
         }
         
         let data = try JSONEncoder().encode(item)
-        let path = baseURL.appendingPathComponent(fn(item.key))
+        let path = self.directory.url.appendingPathComponent(fn(item.key))
         try data.write(to: path)
     }
     
     public func get<T: ArchiveItem>(_ : T.Type, for key: String) -> T? {
-        let path = baseURL.appendingPathComponent(fn(key))
+        let path = self.directory.url.appendingPathComponent(fn(key))
         guard
             let data = try? Data(contentsOf: path),
             let object = try? JSONDecoder().decode(T.self, from: data)
@@ -60,7 +54,7 @@ public struct Archiver<D: Directory> {
     }
     
     public func all<T: ArchiveItem>(_: T.Type, pathExtension: String? = nil) throws -> [T]? {
-        let contents = try FileManager.default.contentsOfDirectory(at: baseURL, includingPropertiesForKeys: nil, options: [])
+        let contents = try FileManager.default.contentsOfDirectory(at: directory.url, includingPropertiesForKeys: nil, options: [])
         
         var entries = [T]()
         for file in contents {
@@ -73,7 +67,7 @@ public struct Archiver<D: Directory> {
     }
     
     public func delete<T: ArchiveItem>(_ item: T) throws {
-        let url = baseURL.appendingPathComponent(fn(item.key))
+        let url = self.directory.url.appendingPathComponent(fn(item.key))
         if FileManager.default.fileExists(atPath: url.path) {
             try FileManager.default.removeItem(at: url)
         } else {
@@ -82,7 +76,8 @@ public struct Archiver<D: Directory> {
     }
     
     public func removeAll() throws {
-        try FileManager.default.removeItem(at: baseURL)
+        let url = directory.url
+        try FileManager.default.removeItem(at: url)
     }
     
     /// File name without extensions
@@ -91,8 +86,7 @@ public struct Archiver<D: Directory> {
     }
     
     private func createDirectory() throws {
-        let doc = FileManager.default.urls(for: .documentDirectory, in: .allDomainsMask).first!
-        try FileManager.default.createDirectory(atPath: doc.appendingPathComponent(pathPrefix).path, withIntermediateDirectories: true, attributes: nil)
+        try FileManager.default.createDirectory(atPath: directory.url.path, withIntermediateDirectories: true, attributes: nil)
     }
     
     /// Clears all archives from all directories.
@@ -119,7 +113,7 @@ public extension Archiver {
     }
     
     func subdirectory(from: String, to: String) -> Archiver<Subdirectory> {
-        let newURL = baseURL
+        let newURL = directory.url
             .appendingPathComponent(from)
             .appendingPathComponent(to)
         
