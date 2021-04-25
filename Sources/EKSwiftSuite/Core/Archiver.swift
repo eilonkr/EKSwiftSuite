@@ -34,11 +34,7 @@ public struct Archiver<D: Directory> {
     }
     
     public func put<T: ArchiveItem>(_ item: T) throws {
-        if !FileManager.default.fileExists(atPath: directory.path) {
-            // Directory doesn't exist.
-            try createDirectory()
-        }
-        
+        try createDirectoryIfNeeded()
         let data = try JSONEncoder().encode(item)
         let path = self.directory.url.appendingPathComponent(fn(item.key))
         try data.write(to: path)
@@ -76,8 +72,7 @@ public struct Archiver<D: Directory> {
     }
     
     public func removeAll() throws {
-        let url = directory.url
-        try FileManager.default.removeItem(at: url)
+        try FileManager.default.removeItem(at: directory.url)
     }
     
     /// File name without extensions
@@ -85,8 +80,11 @@ public struct Archiver<D: Directory> {
         key.filter { $0 != "." }
     }
     
-    private func createDirectory() throws {
-        try FileManager.default.createDirectory(atPath: directory.path, withIntermediateDirectories: true, attributes: nil)
+    public func createDirectoryIfNeeded() throws {
+        if !FileManager.default.fileExists(atPath: directory.url.path) {
+            // Directory doesn't exist.
+            try FileManager.default.createDirectory(atPath: directory.url.path, withIntermediateDirectories: true, attributes: nil)
+        }
     }
     
     /// Clears all archives from all directories.
