@@ -37,7 +37,7 @@ public struct Archiver<D: Directory> {
     public func put<T: ArchiveItem>(_ item: T) throws {
         if !FileManager.default.fileExists(atPath: directory.path) {
             // Directory doesn't exist.
-            try createDirectory(extension: subdir ?? directory.path)
+            try createDirectory()
         }
         
         let data = try JSONEncoder().encode(item)
@@ -86,7 +86,7 @@ public struct Archiver<D: Directory> {
         key.filter { $0 != "." }
     }
     
-    private func createDirectory(extension ext: String? = nil) throws {
+    private func createDirectory() throws {
         try FileManager.default.createDirectory(atPath: directory.path, withIntermediateDirectories: true, attributes: nil)
     }
     
@@ -113,10 +113,10 @@ public extension Archiver {
         return Archiver<Subdirectory>(subdirectory)
     }
     
-    func subdirectory(from path: String, to path: String) -> Archiver<Subdirectory> {
+    func subdirectory(from: String, to: String) -> Archiver<Subdirectory> {
         let newURL = directory.url
-            .appendingPathComponent(item.key)
-            .appendingPathComponent(path)
+            .appendingPathComponent(from)
+            .appendingPathComponent(to)
         
         let subdirectory = Subdirectory(path: newURL.path, url: newURL)
         return Archiver<Subdirectory>(subdirectory)
