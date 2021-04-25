@@ -29,15 +29,16 @@ public struct Archiver<D: Directory> {
         self.directory = directory
     }
     
-    private var pathPrefix: String { "appDocuments" }
-    var baseURL: URL { URL(string: pathPrefix)!.appendingPathExtension(directory.url.appendingPathComponent(pathPrefix).path) }
+    private var pathPrefix: URL { URL(string: "documents")! }
+    
+    var baseURL: URL { pathPrefix.appendingPathExtension(directory.url.path) }
     
     public func itemExists(forKey key: String) -> Bool {
         FileManager.default.fileExists(atPath: baseURL.appendingPathComponent(fn(key)).path)
     }
     
     public func put<T: ArchiveItem>(_ item: T) throws {
-        if !FileManager.default.fileExists(atPath: baseURL.path) {
+        if !FileManager.default.fileExists(atPath: pathPrefix.path) {
             // Directory doesn't exist.
             try createDirectory()
         }
@@ -88,7 +89,7 @@ public struct Archiver<D: Directory> {
     }
     
     private func createDirectory() throws {
-        try FileManager.default.createDirectory(atPath: baseURL.path, withIntermediateDirectories: true, attributes: nil)
+        try FileManager.default.createDirectory(atPath: pathPrefix.path, withIntermediateDirectories: true, attributes: nil)
     }
     
     /// Clears all archives from all directories.
