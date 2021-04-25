@@ -29,9 +29,9 @@ public struct Archiver<D: Directory> {
         self.directory = directory
     }
     
-    private var pathPrefix: URL { URL(string: "documents")! }
+    private var pathPrefix: URL { URL(string: "documents")!.appendingPathExtension(directory.url.path) }
     
-    var baseURL: URL { pathPrefix.appendingPathExtension(directory.url.path) }
+    var baseURL: URL { pathPrefix.appendingPathComponent(directory.url.path) }
     
     public func itemExists(forKey key: String) -> Bool {
         FileManager.default.fileExists(atPath: baseURL.appendingPathComponent(fn(key)).path)
