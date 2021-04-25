@@ -13,6 +13,14 @@ public protocol Directory {
     var url: URL { get }
 }
 
+public protocol ArchiveItem: Codable {
+    var key: String { get }
+}
+
+enum ArchiverError: Error {
+    case fileDoesNotExist
+}
+
 /// A service I wrote for saving data locally to the device's documents directory.
 public struct Archiver<D: Directory> {
     private let directory: D
@@ -26,29 +34,27 @@ public struct Archiver<D: Directory> {
             self.directory.url.appendingPathComponent(fn(key)).path)
     }
     
-    public func put<T: Encodable>(_ item: T, forKey key: String, inSubdirectory subdir: String? = nil) throws {
-        if !FileManager.default.fileExists(atPath: directory.url.appendingPathComponent(subdir ?? directory.path).path) {
+    public func put<T: ArchiveItem>(_ item: T, inSubdirectory subdir: String? = nil) throws {
+        if !FileManager.default.fileExists(atPath: directory.path) {
             // Directory doesn't exist.
             try createDirectory(extension: subdir ?? directory.path)
         }
         
         let data = try JSONEncoder().encode(item)
-        let path = self.directory.url.appendingPathComponent(subdir ?? directory.path).appendingPathComponent(fn(key))
+        let path = self.directory.url.appendingPathComponent(fn(item.key))
         try data.write(to: path)
     }
     
-
-    public func get<T: Decodable>(itemForKey key: String, ofType _: T.Type) -> T? {
-        let path = self.directory.url.appendingPathComponent(directory.path).appendingPathComponent(fn(key))
-        guard
-            let data = try? Data(contentsOf: path),
-            let object = try? JSONDecoder().decode(T.self, from: data)
-        else { return .none }
-        return object
-    }
+//    public func get<T: ArchiveItem>(_ : T.Type, for key: String) -> T? {
+//        guard
+//            let data = try? Data(contentsOf: path),
+//            let object = try? JSONDecoder().decode(T.self, from: data)
+//        else { return .none }
+//        return object
+//    }
     
-    public func all<T: Decodable>(_: T.Type, pathExtension: String? = nil) throws -> [T]? {
-        let contents = try FileManager.default.contentsOfDirectory(at: directory.url.appendingPathComponent(pathExtension ?? directory.path), includingPropertiesForKeys: nil, options: [])
+    public func all<T: ArchiveItem>(_: T.Type, pathExtension: String? = nil) throws -> [T]? {
+        let contents = try FileManager.default.contentsOfDirectory(at: directory.url, includingPropertiesForKeys: nil, options: [])
         
         var entries = [T]()
         for file in contents {
@@ -60,15 +66,17 @@ public struct Archiver<D: Directory> {
         return entries
     }
     
-    public func deleteItem(forKey key: String) throws {
-        let url = self.directory.url.appendingPathComponent(directory.path).appendingPathComponent(fn(key))
+    public func deleteItem(for key: String) throws {
+        let url = self.directory.url.appendingPathComponent(fn(key))
         if FileManager.default.fileExists(atPath: url.path) {
             try FileManager.default.removeItem(at: url)
+        } else {
+            throw ArchiverError.fileDoesNotExist
         }
     }
     
     public func removeAll(extension ext: String? = nil) throws {
-        let url = directory.url.appendingPathComponent(ext ?? directory.path)
+        let url = directory.url
         try FileManager.default.removeItem(at: url)
     }
     
@@ -78,7 +86,7 @@ public struct Archiver<D: Directory> {
     }
     
     private func createDirectory(extension ext: String? = nil) throws {
-        try FileManager.default.createDirectory(atPath: directory.url.appendingPathComponent(ext ?? "").path, withIntermediateDirectories: true, attributes: nil)
+        try FileManager.default.createDirectory(atPath: directory.path, withIntermediateDirectories: true, attributes: nil)
     }
     
     /// Clears all archives from all directories.
@@ -95,8 +103,11 @@ extension Archiver {
         var url: URL
     }
     
-    func subdirectory(_ path: String) -> Archiver<Subdirectory> {
-        let newURL = directory.url.appendingPathComponent(path)
+    func subdirectory(from item: ArchiveItem, path: String) -> Archiver<Subdirectory> {
+        let newURL = directory.url
+            .appendingPathComponent(item.key)
+            .appendingPathComponent(path)
+        
         let subdirectory = Subdirectory(path: newURL.path, url: newURL)
         return Archiver<Subdirectory>(subdirectory)
     }
