@@ -34,7 +34,7 @@ public struct Archiver<D: Directory> {
             self.directory.url.appendingPathComponent(fn(key)).path)
     }
     
-    public func put<T: ArchiveItem>(_ item: T, inSubdirectory subdir: String? = nil) throws {
+    public func put<T: ArchiveItem>(_ item: T) throws {
         if !FileManager.default.fileExists(atPath: directory.path) {
             // Directory doesn't exist.
             try createDirectory(extension: subdir ?? directory.path)
@@ -105,6 +105,15 @@ public extension Archiver {
     }
     
     func subdirectory(from item: ArchiveItem, path: String) -> Archiver<Subdirectory> {
+        let newURL = directory.url
+            .appendingPathComponent(item.key)
+            .appendingPathComponent(path)
+        
+        let subdirectory = Subdirectory(path: newURL.path, url: newURL)
+        return Archiver<Subdirectory>(subdirectory)
+    }
+    
+    func subdirectory(from path: String, to path: String) -> Archiver<Subdirectory> {
         let newURL = directory.url
             .appendingPathComponent(item.key)
             .appendingPathComponent(path)
