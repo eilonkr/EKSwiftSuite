@@ -37,7 +37,7 @@ public struct Archiver<D: Directory> {
     }
     
     public func put<T: ArchiveItem>(_ item: T) throws {
-        if !FileManager.default.fileExists(atPath: directory.path) {
+        if !FileManager.default.fileExists(atPath: baseURL.path) {
             // Directory doesn't exist.
             try createDirectory()
         }
