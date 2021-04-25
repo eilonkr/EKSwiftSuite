@@ -45,13 +45,14 @@ public struct Archiver<D: Directory> {
         try data.write(to: path)
     }
     
-//    public func get<T: ArchiveItem>(_ : T.Type, for key: String) -> T? {
-//        guard
-//            let data = try? Data(contentsOf: path),
-//            let object = try? JSONDecoder().decode(T.self, from: data)
-//        else { return .none }
-//        return object
-//    }
+    public func get<T: ArchiveItem>(_ : T.Type, for key: String) -> T? {
+        let path = self.directory.url.appendingPathComponent(fn(key))
+        guard
+            let data = try? Data(contentsOf: path),
+            let object = try? JSONDecoder().decode(T.self, from: data)
+        else { return .none }
+        return object
+    }
     
     public func all<T: ArchiveItem>(_: T.Type, pathExtension: String? = nil) throws -> [T]? {
         let contents = try FileManager.default.contentsOfDirectory(at: directory.url, includingPropertiesForKeys: nil, options: [])
