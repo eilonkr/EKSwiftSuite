@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol Directory: CaseIterable, RawRepresentable {
+public protocol Directory {
     var path: String { get }
     var url: URL { get }
 }
@@ -82,9 +82,23 @@ public struct Archiver<D: Directory> {
     }
     
     /// Clears all archives from all directories.
-     static func clearAllCache() throws {
-        for path in D.allCases {
+    static func clearAllCache(allCases: [D]) throws {
+        for path in allCases {
             try Self(path).removeAll()
         }
-     }
+    }
 }
+
+extension Archiver {
+    struct Subdirectory: Directory {
+        var path: String
+        var url: URL
+    }
+    
+    func subdirectory(_ path: String) -> Archiver<Subdirectory> {
+        let newURL = directory.url.appendingPathComponent(path)
+        let subdirectory = Subdirectory(path: newURL.path, url: newURL)
+        return Archiver<Subdirectory>(subdirectory)
+    }
+}
+
