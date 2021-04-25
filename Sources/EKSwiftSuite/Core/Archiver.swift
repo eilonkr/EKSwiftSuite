@@ -98,10 +98,10 @@ public struct Archiver<D: Directory> {
     }
 }
 
-extension Archiver {
+public extension Archiver {
     struct Subdirectory: Directory {
-        var path: String
-        var url: URL
+        public var path: String
+        public var url: URL
     }
     
     func subdirectory(from item: ArchiveItem, path: String) -> Archiver<Subdirectory> {
