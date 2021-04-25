@@ -86,7 +86,7 @@ public struct Archiver<D: Directory> {
     }
     
     private func createDirectory() throws {
-        try FileManager.default.createDirectory(atPath: directory.url.path, withIntermediateDirectories: true, attributes: nil)
+        try FileManager.default.createDirectory(atPath: directory.path, withIntermediateDirectories: true, attributes: nil)
     }
     
     /// Clears all archives from all directories.
