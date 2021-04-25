@@ -31,14 +31,16 @@ public struct Archiver<D: Directory> {
     
     private var pathPrefix: String { "documents" }
     
-    var baseURL: URL { pathPrefix.appendingPathExtension(directory.url.path) }
+    var baseURL: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .allDomainsMask).first!.appendingPathComponent(pathPrefix).appendingPathComponent(directory.url.path)
+    }
     
     public func itemExists(forKey key: String) -> Bool {
         FileManager.default.fileExists(atPath: baseURL.appendingPathComponent(fn(key)).path)
     }
     
     public func put<T: ArchiveItem>(_ item: T) throws {
-        if !FileManager.default.fileExists(atPath: pathPrefix.path) {
+        if !FileManager.default.fileExists(atPath: directory.url.path) {
             // Directory doesn't exist.
             try createDirectory()
         }
