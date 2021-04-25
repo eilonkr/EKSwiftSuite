@@ -67,8 +67,8 @@ public struct Archiver<D: Directory> {
         return entries
     }
     
-    public func deleteItem(for key: String) throws {
-        let url = self.directory.url.appendingPathComponent(fn(key))
+    public func delete<T: ArchiveItem>(_ item: T) throws {
+        let url = self.directory.url.appendingPathComponent(fn(item.key))
         if FileManager.default.fileExists(atPath: url.path) {
             try FileManager.default.removeItem(at: url)
         } else {
@@ -76,7 +76,7 @@ public struct Archiver<D: Directory> {
         }
     }
     
-    public func removeAll(extension ext: String? = nil) throws {
+    public func removeAll() throws {
         let url = directory.url
         try FileManager.default.removeItem(at: url)
     }
