@@ -1,13 +1,13 @@
 
 import UIKit
 
-public protocol Coordinator: class {
+public protocol Coordinator: AnyObject {
     var delegate: CoordinatorDelegate? { get set }
     func append(child: Coordinator)
     func remove(child: Coordinator)
 }
 
-public protocol CoordinatorDelegate: class {
+public protocol CoordinatorDelegate: AnyObject {
     func childCoordinatorDidFinish(_ childCoordinator: Coordinator)
 }
 
