@@ -35,7 +35,7 @@ open class SheetTransition: NSObject, UIViewControllerTransitioningDelegate, UIV
     // MARK: - UIViewControllerAnimatedTransitioning
     
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return isPresent ? dismissAnimationDuration : presentAnimationDuration
+        return !isPresent ? dismissAnimationDuration : presentAnimationDuration
     }
     
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
