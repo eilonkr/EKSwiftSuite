@@ -7,24 +7,24 @@
 
 import Foundation
 
-protocol Endpoint {
+public protocol Endpoint {
     static var baseURLPath: String { get }
     var path: String { get }
     var url: URL { get }
 }
 
-extension Endpoint {
+public extension Endpoint {
     var url: URL {
         return URL(string: Self.baseURLPath + path)!
     }
 }
 
-enum NetworkingError: Error {
+public enum NetworkingError: Error {
     case badRequest
     case unknown
 }
 
-enum HTTPMethod: String {
+public enum HTTPMethod: String {
     case get, post, put, patch, delete
     
     var value: String {
@@ -33,7 +33,7 @@ enum HTTPMethod: String {
 }
 
 /// A simple HTTP layer I wrote.
-protocol HTTPRequest {
+public protocol HTTPRequest {
     var endpoint: Endpoint              { get }
     var method: HTTPMethod              { get }
     var headers: [String: String]       { get }
@@ -45,7 +45,7 @@ protocol HTTPRequest {
 }
 
 /// URLSession implementation.
-extension HTTPRequest {
+public extension HTTPRequest {
     func make<U: Decodable>(expect type: U.Type, receiveOn receivingQueue: DispatchQueue = .main, callback: @escaping ResultCallback<U>) {
         var request = URLRequest(url: endpoint.url)
         request.httpMethod = method.value
