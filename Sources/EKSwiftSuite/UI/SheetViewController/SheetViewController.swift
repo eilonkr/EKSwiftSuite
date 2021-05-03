@@ -34,10 +34,11 @@ open class SheetViewController: UIViewController {
         }
     }
 
-    private lazy var transition = SheetTransition(duration: transitionDuration)
+    private lazy var transition = SheetTransition(presentDuration: transitionInDuration, dismissDuration: transitionOutDuration)
     
     let appearance: Appearance
-    let transitionDuration: TimeInterval
+    let transitionInDuration: TimeInterval
+    let transitionOutDuration: TimeInterval
     let isSwipeDismissEnabled: Bool
     let contentContainerView: UIView = UIView()
     let contentView: UIView
@@ -58,10 +59,11 @@ open class SheetViewController: UIViewController {
     
     weak var output: SheetViewControllerOutput?
     
-    public init(contentView: UIView, appearance: Appearance, transitionDuration: TimeInterval = 0.42, isSwipeDismissEnabled: Bool = false, output: SheetViewControllerOutput?) {
+    public init(contentView: UIView, appearance: Appearance, transitionInDuration: TimeInterval = 0.42, transitionOutDuration: TimeInterval = 0.175, isSwipeDismissEnabled: Bool = false, output: SheetViewControllerOutput?) {
         self.contentView = contentView
         self.appearance = appearance
-        self.transitionDuration = transitionDuration
+        self.transitionInDuration = transitionInDuration
+        self.transitionOutDuration = transitionOutDuration
         self.isSwipeDismissEnabled = isSwipeDismissEnabled
         self.output = output
         super.init(nibName: nil, bundle: nil)
@@ -71,7 +73,8 @@ open class SheetViewController: UIViewController {
     required public init?(coder: NSCoder) {
         contentView = .init()
         appearance = .init(tintColor: .systemBlue, backgroundColor: .white, backgroundDimColor: .white, backgroundDimLevel: 0.34, closeImage: .init())
-        transitionDuration = 0.42
+        transitionInDuration = 0.42
+        transitionOutDuration = 0.175
         isSwipeDismissEnabled = false
         super.init(coder: coder)
         commonInit()
