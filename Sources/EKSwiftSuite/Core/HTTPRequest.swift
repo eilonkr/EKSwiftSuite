@@ -46,7 +46,7 @@ public protocol HTTPRequest {
 
 /// URLSession implementation.
 public extension HTTPRequest {
-    func make<U: Decodable>(expect type: U.Type, receiveOn receivingQueue: DispatchQueue = .main, callback: @escaping ResultCallback<U>) {
+    public func make<U: Decodable>(expect type: U.Type, receiveOn receivingQueue: DispatchQueue = .main, callback: @escaping ResultCallback<U>) {
         var request = URLRequest(url: endpoint.url)
         request.httpMethod = method.value
         headers.forEach { k, v in
@@ -97,7 +97,7 @@ public extension HTTPRequest {
         .resume()
     }
     
-    func make<T: Encodable, U: Decodable>(send some: T, expect type: U.Type, receiveOn receivingQueue: DispatchQueue = .main, callback: @escaping ResultCallback<U>) {
+    public func make<T: Encodable, U: Decodable>(send some: T, expect type: U.Type, receiveOn receivingQueue: DispatchQueue = .main, callback: @escaping ResultCallback<U>) {
         var request = URLRequest(url: endpoint.url)
         request.httpMethod = method.value
         headers.forEach { k, v in
