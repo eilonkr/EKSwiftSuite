@@ -11,12 +11,10 @@ open class SheetTransition: NSObject, UIViewControllerTransitioningDelegate, UIV
     
     private var isPresent = false
 
-    private let presentAnimationDuration: TimeInterval
-    private let dismissAnimationDuration: TimeInterval
+    private let transitionDuration: TimeInterval
     
-    init(presentDuration: TimeInterval, dismissDuration: TimeInterval) {
-        self.presentAnimationDuration = presentDuration
-        self.dismissAnimationDuration = dismissDuration
+    init(transitionDuration: TimeInterval) {
+        self.transitionDuration = transitionDuration
         super.init()
     }
     
@@ -35,7 +33,7 @@ open class SheetTransition: NSObject, UIViewControllerTransitioningDelegate, UIV
     // MARK: - UIViewControllerAnimatedTransitioning
     
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return !isPresent ? dismissAnimationDuration : presentAnimationDuration
+        return transitionDuration
     }
     
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
