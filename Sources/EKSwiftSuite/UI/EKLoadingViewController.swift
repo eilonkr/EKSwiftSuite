@@ -52,7 +52,6 @@ open class LoadingViewController: UIViewController {
         view.addSubview(loadingStackView)
         loadingStackView.addSubview(activityIndicator)
         view.backgroundColor = style.backgroundColor.withAlphaComponent(backgroundOpacity)
-        activityIndicator.sizeToFit()
         activityIndicator.startAnimating()
         activityIndicator.tintColor = style.tintColor
         activityIndicator.color = style.tintColor
@@ -62,7 +61,6 @@ open class LoadingViewController: UIViewController {
             label.text = text
             label.textColor = style.tintColor
             label.font = .preferredFont(forTextStyle: .body)
-            label.sizeToFit()
             label.textAlignment = .center
             loadingStackView.addArrangedSubview(label)
         }
