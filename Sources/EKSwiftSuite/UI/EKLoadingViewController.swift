@@ -66,11 +66,8 @@ open class LoadingViewController: UIViewController {
             label.textAlignment = .center
             loadingStackView.addArrangedSubview(label)
         }
-    }
-    
-    public override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        loadingStackView.center = view.center
+        
+        loadingStackView.center(in: view)
     }
 }
 
