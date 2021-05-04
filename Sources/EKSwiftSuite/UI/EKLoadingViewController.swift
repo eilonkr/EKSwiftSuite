@@ -50,7 +50,7 @@ open class LoadingViewController: UIViewController {
     
     private func configure() {
         view.addSubview(loadingStackView)
-        loadingStackView.addSubview(activityIndicator)
+        loadingStackView.addArrangedSubview(activityIndicator)
         view.backgroundColor = style.backgroundColor.withAlphaComponent(backgroundOpacity)
         activityIndicator.startAnimating()
         activityIndicator.tintColor = style.tintColor
