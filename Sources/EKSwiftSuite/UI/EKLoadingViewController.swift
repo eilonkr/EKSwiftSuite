@@ -63,16 +63,14 @@ open class LoadingViewController: UIViewController {
             label.textColor = style.tintColor
             label.font = .preferredFont(forTextStyle: .body)
             label.sizeToFit()
+            label.textAlignment = .center
             loadingStackView.addArrangedSubview(label)
         }
     }
     
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        loadingStackView.center = CGPoint(
-            x: view.bounds.width  / 2,
-            y: view.bounds.height / 2
-        )
+        loadingStackView.center = view.center
     }
 }
 
