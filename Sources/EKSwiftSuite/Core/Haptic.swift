@@ -6,7 +6,6 @@ public enum Haptic {
     case notification(UINotificationFeedbackGenerator.FeedbackType)
     case selection
     
-    // trigger
     public func generate() {        
         DispatchQueue.main.async {
             switch self {
