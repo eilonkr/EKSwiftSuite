@@ -23,7 +23,6 @@ public enum Haptic {
                 generator.prepare()
                 generator.selectionChanged()
             }
-            
         }
     }
 }
