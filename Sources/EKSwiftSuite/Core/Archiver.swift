@@ -21,19 +21,19 @@ public struct Archiver<D: Directory> {
         self.directory = directory
     }
     
-    public func itemExists(forKey key: String) -> Bool {
+    public func itemExists(for key: String) -> Bool {
         FileManager.default.fileExists(atPath:
             self.directory.url.appendingPathComponent(fn(key)).path)
     }
     
-    public func put<T: Encodable>(_ item: T, forKey key: String, inSubdirectory subdir: String? = nil) throws {
-        if !FileManager.default.fileExists(atPath: directory.url.appendingPathComponent(subdir ?? directory.path).path) {
+    public func put<T: Encodable>(_ item: T, for key: String) throws {
+        if !FileManager.default.fileExists(atPath: directory.url.appendingPathComponent(directory.path).path) {
             // Directory doesn't exist.
-            try createDirectory(extension: subdir ?? directory.path)
+            try createDirectory(extension: directory.path)
         }
         
         let data = try JSONEncoder().encode(item)
-        let path = self.directory.url.appendingPathComponent(subdir ?? directory.path).appendingPathComponent(fn(key))
+        let path = self.directory.url.appendingPathComponent(directory.path).appendingPathComponent(fn(key))
         try data.write(to: path)
     }
     
@@ -60,7 +60,7 @@ public struct Archiver<D: Directory> {
         return entries
     }
     
-    public func deleteItem(forKey key: String) throws {
+    public func deleteItem(for key: String) throws {
         let url = self.directory.url.appendingPathComponent(directory.path).appendingPathComponent(fn(key))
         if FileManager.default.fileExists(atPath: url.path) {
             try FileManager.default.removeItem(at: url)
@@ -97,7 +97,7 @@ extension Archiver {
     
     func subdirectory(_ path: String) -> Archiver<Subdirectory> {
         let newURL = directory.url.appendingPathComponent(path)
-        let subdirectory = Subdirectory(path: newURL.path, url: newURL)
+        let subdirectory = Subdirectory(path: path, url: newURL)
         return Archiver<Subdirectory>(subdirectory)
     }
 }
