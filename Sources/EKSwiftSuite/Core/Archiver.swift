@@ -50,8 +50,8 @@ public struct Archiver<D: Directory> {
         return object
     }
     
-    public func all<T: Decodable>(_: T.Type, pathExtension: String? = nil) throws -> [T]? {
-        let contents = try FileManager.default.contentsOfDirectory(at: directory.url.appendingPathComponent(pathExtension ?? directory.path), includingPropertiesForKeys: nil, options: [])
+    public func all<T: Decodable>(_: T.Type) throws -> [T]? {
+        let contents = try FileManager.default.contentsOfDirectory(at: directory.url, includingPropertiesForKeys: nil, options: [])
         
         var entries = [T]()
         for file in contents {
