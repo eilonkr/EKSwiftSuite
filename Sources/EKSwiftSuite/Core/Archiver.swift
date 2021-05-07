@@ -107,7 +107,7 @@ public extension Archiver {
             .appendingPathComponent(nodePath)
             .appendingPathComponent(key)
         
-        let subdirectory = Subdirectory(path: path, url: newURL)
+        let subdirectory = Subdirectory(path: nodePath, url: newURL)
         return Archiver<Subdirectory>(subdirectory)
     }
 }
