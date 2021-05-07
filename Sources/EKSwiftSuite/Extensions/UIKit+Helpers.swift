@@ -19,6 +19,12 @@ public extension CGAffineTransform {
     }
 }
 
+extension CGAffineTransform: ExpressibleByFloatLiteral {
+    public init(floatLiteral value: FloatLiteralType) {
+        self = .evenScale(CGFloat(value))
+    }
+}
+
 public extension UIEdgeInsets {
     static func even(_ value: CGFloat) -> UIEdgeInsets {
         return .init(top: value, left: value, bottom: value, right: value)
