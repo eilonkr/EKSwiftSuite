@@ -96,7 +96,7 @@ public struct Archiver<D: Directory> {
     }
 }
 
-extension Archiver {
+public extension Archiver {
     struct Subdirectory: Directory {
         var path: String
         var url: URL
