@@ -102,12 +102,9 @@ public extension Archiver {
         public var url: URL
     }
     
-    func subdirectory(from nodePath: String, for key: String) -> Archiver<Subdirectory> {
-        let newURL = directory.url
-            .appendingPathComponent(nodePath)
-            .appendingPathComponent(key)
-        
-        let subdirectory = Subdirectory(path: nodePath, url: newURL)
+    func subdirectory(_ path: String) -> Archiver<Subdirectory> {
+        let newURL = directory.url.appendingPathComponent(path)
+        let subdirectory = Subdirectory(path: path, url: newURL)
         return Archiver<Subdirectory>(subdirectory)
     }
 }
