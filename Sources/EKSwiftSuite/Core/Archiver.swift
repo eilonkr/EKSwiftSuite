@@ -13,6 +13,12 @@ public protocol Directory {
     var url: URL { get }
 }
 
+public extension Directory {
+    var url: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(path)
+    }
+}
+
 /// A service I wrote for saving data locally to the device's documents directory.
 public struct Archiver<D: Directory> {
     private let directory: D
@@ -27,19 +33,16 @@ public struct Archiver<D: Directory> {
     }
     
     public func put<T: Encodable>(_ item: T, for key: String) throws {
-        if !FileManager.default.fileExists(atPath: directory.url.appendingPathComponent(directory.path).path) {
-            // Directory doesn't exist.
-            try createDirectory(extension: directory.path)
-        }
+        try createDirectoryIfNeeded()
         
         let data = try JSONEncoder().encode(item)
-        let path = self.directory.url.appendingPathComponent(directory.path).appendingPathComponent(fn(key))
+        let path = self.directory.url.appendingPathComponent(fn(key))
         try data.write(to: path)
     }
     
 
     public func get<T: Decodable>(itemForKey key: String, ofType _: T.Type) -> T? {
-        let path = self.directory.url.appendingPathComponent(directory.path).appendingPathComponent(fn(key))
+        let path = self.directory.url.appendingPathComponent(fn(key))
         guard
             let data = try? Data(contentsOf: path),
             let object = try? JSONDecoder().decode(T.self, from: data)
@@ -61,14 +64,14 @@ public struct Archiver<D: Directory> {
     }
     
     public func deleteItem(for key: String) throws {
-        let url = self.directory.url.appendingPathComponent(directory.path).appendingPathComponent(fn(key))
+        let url = self.directory.url.appendingPathComponent(fn(key))
         if FileManager.default.fileExists(atPath: url.path) {
             try FileManager.default.removeItem(at: url)
         }
     }
     
-    public func removeAll(extension ext: String? = nil) throws {
-        let url = directory.url.appendingPathComponent(ext ?? directory.path)
+    public func removeAll(extension: String? = nil) throws {
+        let url = directory.url.appendingPathComponent(`extension` ?? directory.path)
         try FileManager.default.removeItem(at: url)
     }
     
@@ -77,8 +80,12 @@ public struct Archiver<D: Directory> {
         key.filter { $0 != "." }
     }
     
-    private func createDirectory(extension ext: String? = nil) throws {
-        try FileManager.default.createDirectory(atPath: directory.url.appendingPathComponent(ext ?? "").path, withIntermediateDirectories: true, attributes: nil)
+    private func createDirectoryIfNeeded() throws {
+        if !FileManager.default.fileExists(atPath: directory.url.path) {
+            // Directory doesn't exist.
+        
+            try FileManager.default.createDirectory(atPath: directory.url.path, withIntermediateDirectories: true, attributes: nil)
+        }
     }
     
     /// Clears all archives from all directories.
