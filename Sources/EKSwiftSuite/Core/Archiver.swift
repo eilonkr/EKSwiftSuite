@@ -29,20 +29,20 @@ public struct Archiver<D: Directory> {
     
     public func itemExists(for key: String) -> Bool {
         FileManager.default.fileExists(atPath:
-            self.directory.url.appendingPathComponent(fn(key)).path)
+            self.directory.url.appendingPathComponent(key.fileName).path)
     }
     
     public func put<T: Encodable>(_ item: T, for key: String) throws {
         try createDirectoryIfNeeded()
         
         let data = try JSONEncoder().encode(item)
-        let path = self.directory.url.appendingPathComponent(fn(key))
+        let path = self.directory.url.appendingPathComponent(key.fileName)
         try data.write(to: path)
     }
     
 
     public func get<T: Decodable>(itemForKey key: String, ofType _: T.Type) -> T? {
-        let path = self.directory.url.appendingPathComponent(fn(key))
+        let path = self.directory.url.appendingPathComponent(key.fileName)
         guard
             let data = try? Data(contentsOf: path),
             let object = try? JSONDecoder().decode(T.self, from: data)
@@ -64,7 +64,7 @@ public struct Archiver<D: Directory> {
     }
     
     public func deleteItem(for key: String) throws {
-        let url = self.directory.url.appendingPathComponent(fn(key))
+        let url = self.directory.url.appendingPathComponent(key.fileName)
         if FileManager.default.fileExists(atPath: url.path) {
             try FileManager.default.removeItem(at: url)
         }
@@ -73,11 +73,6 @@ public struct Archiver<D: Directory> {
     public func removeAll(extension: String? = nil) throws {
         let url = directory.url.appendingPathComponent(`extension` ?? directory.path)
         try FileManager.default.removeItem(at: url)
-    }
-    
-    /// File name without extensions
-    private func fn(_ key: String) -> String {
-        key.filter { $0 != "." }
     }
     
     private func createDirectoryIfNeeded() throws {
@@ -106,6 +101,13 @@ public extension Archiver {
         let newURL = directory.url.appendingPathComponent(path)
         let subdirectory = Subdirectory(path: path, url: newURL)
         return Archiver<Subdirectory>(subdirectory)
+    }
+}
+
+private extension String {
+    /// Clean file name, removing file extension dots.
+    var fileName: String {
+        filter { $0 != "." }
     }
 }
 
