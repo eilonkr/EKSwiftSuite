@@ -107,7 +107,7 @@ public extension Archiver {
 private extension String {
     /// Clean file name, removing file extension dots.
     var fileName: String {
-        filter { $0 != "." }
+        replacingOccurrences(of: ".", with: "")
     }
 }
 
