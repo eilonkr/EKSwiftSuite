@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MaskingImageView: UIImageView {
+final class MaskingImageView: UIImageView {
     private let maskImageView = UIImageView()
 
     public var maskImage: UIImage? {
@@ -23,9 +23,8 @@ class MaskingImageView: UIImageView {
     }
 
     private func updateView() {
-        if maskImageView.image != nil {
-            maskImageView.frame = bounds
-            mask = maskImageView
-        }
+        assert(maskImageView.image != nil, "Empty image mask.")
+        maskImageView.frame = bounds
+        mask = maskImageView
     }
 }
