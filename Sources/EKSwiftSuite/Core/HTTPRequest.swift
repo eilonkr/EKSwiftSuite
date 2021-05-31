@@ -152,7 +152,7 @@ public extension HTTPRequest {
                     callback(.failure(e))
                 }
             }
-        }
+        }.resume()
     }
 }
 
