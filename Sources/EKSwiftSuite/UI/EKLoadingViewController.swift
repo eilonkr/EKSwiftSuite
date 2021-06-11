@@ -24,8 +24,19 @@ open class LoadingViewController: UIViewController {
         return stack
     }()
     
+    @available(iOS 13.0, *)
     public init(style: Style = .default, indicatorStyle: UIActivityIndicatorView.Style = .medium, backgroundOpacity: CGFloat = 0.75, infoText: String? = nil) {
         self.style = style
+        self.indicatorStyle = indicatorStyle
+        self.backgroundOpacity = backgroundOpacity
+        self.infoText = infoText
+        
+        super.init(nibName: nil, bundle: nil)
+        setupTransition()
+    }
+    
+    public init(oldStyle: Style = .default, indicatorStyle: UIActivityIndicatorView.Style = .white, backgroundOpacity: CGFloat = 0.75, infoText: String? = nil) {
+        self.style = oldStyle
         self.indicatorStyle = indicatorStyle
         self.backgroundOpacity = backgroundOpacity
         self.infoText = infoText
@@ -102,9 +113,16 @@ public extension LoadingViewController {
 // MARK: - Global Presentation
 
 public extension UIViewController {
+    @available(iOS 13.0, *)
     func startLoadingInterface(style: LoadingViewController.Style = .default, indicatorStyle: UIActivityIndicatorView.Style = .medium, backgroundOpacity: CGFloat = 0.75, infoText: String? = nil) {
         guard !(presentedViewController is LoadingViewController) else { return }
         let loadingViewController = LoadingViewController(style: style, indicatorStyle: indicatorStyle, backgroundOpacity: backgroundOpacity, infoText: infoText)
+        present(loadingViewController, animated: true, completion: nil)
+    }
+    
+    func startOldLoadingInterface(style: LoadingViewController.Style = .default, indicatorStyle: UIActivityIndicatorView.Style = .white, backgroundOpacity: CGFloat = 0.75, infoText: String? = nil) {
+        guard !(presentedViewController is LoadingViewController) else { return }
+        let loadingViewController = LoadingViewController(oldStyle: style, indicatorStyle: indicatorStyle, backgroundOpacity: backgroundOpacity, infoText: infoText)
         present(loadingViewController, animated: true, completion: nil)
     }
     
