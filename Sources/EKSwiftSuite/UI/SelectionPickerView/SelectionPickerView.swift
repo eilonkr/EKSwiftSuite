@@ -7,11 +7,11 @@
 
 import UIKit
 
-protocol SelectionItem {
+public protocol SelectionItem {
     var title: String { get }
 }
 
-final class SelectionPickerView<Item: SelectionItem>: UIView {
+public final class SelectionPickerView<Item: SelectionItem>: UIView {
 
     public var items: [Item] = [] {
         didSet { configureItems() }
@@ -57,7 +57,7 @@ final class SelectionPickerView<Item: SelectionItem>: UIView {
     
     private lazy var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: backgroundStyle.effectStyle ?? .regular))
     
-    init(items: [Item] = [], selectedItem: Item) {
+    public init(items: [Item] = [], selectedItem: Item) {
         self.items = items
         self.selectedItem = selectedItem
         super.init(frame: .zero)
@@ -69,7 +69,7 @@ final class SelectionPickerView<Item: SelectionItem>: UIView {
         commonInit()
     }
     
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         roundCorners(to: .rounded)
         highlightView.roundCorners(to: .rounded)
@@ -86,7 +86,7 @@ final class SelectionPickerView<Item: SelectionItem>: UIView {
         configureItems()
     }
 
-    override func didMoveToSuperview() {
+    public override func didMoveToSuperview() {
         super.didMoveToSuperview()
         //configureBackgroundStyle()
         DispatchQueue.main.async {

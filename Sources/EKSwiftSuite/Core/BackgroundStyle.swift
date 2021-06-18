@@ -7,9 +7,10 @@
 
 import UIKit
 
-enum BackgroundStyle {
+public enum BackgroundStyle {
     case solid(UIColor)
     case blur(UIBlurEffect.Style)
+    
     var effectStyle: UIBlurEffect.Style? {
         if case .blur(let style) = self {
             return style
