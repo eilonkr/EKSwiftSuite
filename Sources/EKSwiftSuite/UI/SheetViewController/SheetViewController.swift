@@ -128,7 +128,7 @@ open class SheetViewController: UIViewController {
     private func configureCloseButton() {
         let closeButton = SpringButton()
         closeButton.setImage(appearance.closeImage, for: .normal)
-        closeButton.tintColor = appearance.tintColor
+        closeButton.tintColor = appearance.closeImageTint
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         closeButton.contentEdgeInsets = .even(4.0)
         contentContainerView.addSubview(closeButton)
