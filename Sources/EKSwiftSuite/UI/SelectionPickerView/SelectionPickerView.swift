@@ -11,7 +11,7 @@ public protocol SelectionItem {
     var title: String { get }
 }
 
-public final class SelectionPickerView<Item: SelectionItem>: UIView {
+open class SelectionPickerView<Item: SelectionItem>: UIView {
 
     public var items: [Item] = [] {
         didSet { configureItems() }
@@ -64,7 +64,7 @@ public final class SelectionPickerView<Item: SelectionItem>: UIView {
         commonInit()
     }
     
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
     }
