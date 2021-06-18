@@ -24,21 +24,24 @@ open class SheetViewController: UIViewController {
         let backgroundDimColor: UIColor
         let backgroundDimLevel: CGFloat
         let closeImage: UIImage
+        let closeImageTint: UIColor
         
-        public init(tintColor: UIColor, backgroundColor: UIColor, backgroundDimColor: UIColor, backgroundDimLevel: CGFloat, closeImage: UIImage) {
+        public init(tintColor: UIColor, backgroundColor: UIColor, backgroundDimColor: UIColor, backgroundDimLevel: CGFloat, closeImage: UIImage, closeImageTint: UIColor) {
             self.tintColor = tintColor
             self.backgroundColor = backgroundColor
             self.backgroundDimColor = backgroundDimColor
             self.backgroundDimLevel = backgroundDimLevel
             self.closeImage = closeImage
+            self.closeImageTint = closeImageTint
         }
     }
 
-    private lazy var transition = SheetTransition(transitionDuration: transitionDuration)
+    private lazy var transition = SheetTransition(transitionDuration: transitionDuration, isSpringEnabled: isSpringEnabled)
     
     let appearance: Appearance
     let transitionDuration: TimeInterval
     let isSwipeDismissEnabled: Bool
+    let isSpringEnabled: Bool
     let contentContainerView: UIView = UIView()
     let contentView: UIView
     
@@ -58,11 +61,12 @@ open class SheetViewController: UIViewController {
     
     weak var output: SheetViewControllerOutput?
     
-    public init(contentView: UIView, appearance: Appearance, transitionDuration: TimeInterval = 0.42, isSwipeDismissEnabled: Bool = false, output: SheetViewControllerOutput?) {
+    public init(contentView: UIView, appearance: Appearance, transitionDuration: TimeInterval = 0.42, isSwipeDismissEnabled: Bool = false, isSpringLoadEnabled: Bool = true, output: SheetViewControllerOutput?) {
         self.contentView = contentView
         self.appearance = appearance
         self.transitionDuration = transitionDuration
         self.isSwipeDismissEnabled = isSwipeDismissEnabled
+        self.isSpringEnabled = isSpringLoadEnabled
         self.output = output
         super.init(nibName: nil, bundle: nil)
         commonInit()
@@ -70,9 +74,10 @@ open class SheetViewController: UIViewController {
     
     required public init?(coder: NSCoder) {
         contentView = .init()
-        appearance = .init(tintColor: .systemBlue, backgroundColor: .white, backgroundDimColor: .white, backgroundDimLevel: 0.34, closeImage: .init())
+        appearance = .init(tintColor: .systemBlue, backgroundColor: .white, backgroundDimColor: .white, backgroundDimLevel: 0.34, closeImage: .init(), closeImageTint: .systemBlue)
         transitionDuration = 0.42
         isSwipeDismissEnabled = false
+        isSpringEnabled = true
         super.init(coder: coder)
         commonInit()
     }

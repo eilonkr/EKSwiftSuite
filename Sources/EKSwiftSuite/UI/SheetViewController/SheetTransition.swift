@@ -9,12 +9,15 @@ import UIKit
 
 open class SheetTransition: NSObject, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning {
     
+    public var isSpringEnabled: Bool
+    
     private var isPresent = false
 
     private let transitionDuration: TimeInterval
     
-    init(transitionDuration: TimeInterval) {
+    init(transitionDuration: TimeInterval, isSpringEnabled: Bool) {
         self.transitionDuration = transitionDuration
+        self.isSpringEnabled = isSpringEnabled
         super.init()
     }
     
@@ -65,7 +68,7 @@ open class SheetTransition: NSObject, UIViewControllerTransitioningDelegate, UIV
         let height = to.contentContainerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         to.contentContainerView.transform = .init(translationX: 0, y: height)
         
-        UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.8, options: [.curveEaseInOut, .allowUserInteraction]) {
+        UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: isSpringEnabled ? 0.8 : 1.0, initialSpringVelocity: isSpringEnabled ? 0.8 : 1.0, options: [.curveEaseInOut, .allowUserInteraction]) {
             to.contentContainerView.transform = .identity
             to.view.backgroundColor = to.appearance.backgroundDimColor.withAlphaComponent(to.appearance.backgroundDimLevel)
             to.view.layoutIfNeeded()
