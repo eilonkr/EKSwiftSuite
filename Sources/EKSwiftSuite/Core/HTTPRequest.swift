@@ -22,7 +22,7 @@ public extension Endpoint {
 }
 
 public enum NetworkingError: Error {
-    case badRequest
+    case badRequest(HTTPURLResponse? = nil)
     case unknown
 }
 
@@ -61,9 +61,10 @@ public extension HTTPRequest {
         }
         
         let (data, response) = try await URLSession.shared.data(for: request)
-        guard let httpResponse = response as? HTTPURLResponse,
-              (200...299).contains(httpResponse.statusCode) else {
-            throw NetworkingError.badRequest
+        let httpResponse = response as! HTTPURLResponse
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw NetworkingError.badRequest(httpResponse)
         }
         
         let resultObject = try JSONDecoder().decode(type, from: data)
@@ -88,7 +89,7 @@ public extension HTTPRequest {
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse,
               (200...299).contains(httpResponse.statusCode) else {
-            throw NetworkingError.badRequest
+            throw NetworkingError.badRequest()
         }
         
         let resultObject = try JSONDecoder().decode(decodable, from: data)
@@ -132,7 +133,7 @@ public extension HTTPRequest {
             
             if httpResponse.statusCode != 200 {
                 DispatchQueue.main.async {
-                    callback(.failure(NetworkingError.badRequest))
+                    callback(.failure(NetworkingError.badRequest()))
                 }
                 return
             }
@@ -191,7 +192,7 @@ public extension HTTPRequest {
             
             if !(200...299).contains(httpResponse.statusCode) {
                 DispatchQueue.main.async {
-                    callback(.failure(NetworkingError.badRequest))
+                    callback(.failure(NetworkingError.badRequest()))
                 }
                 return
             }
