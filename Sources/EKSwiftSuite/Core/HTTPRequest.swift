@@ -14,8 +14,10 @@ public protocol Endpoint {
 }
 
 public extension Endpoint {
-    var url: URL {
-        return URL(string: Self.baseURLPath + path)!
+    var urlComponents: URLComponents {
+        var urlComponents = URLComponents(string: Self.baseURLPath)!
+        urlComponents.path = path
+        return urlComponents
     }
 }
 
@@ -42,6 +44,56 @@ public protocol HTTPRequest {
     typealias ResultCallback<T: Decodable> = (Result<T, Error>) -> Void
     func make<U: Decodable>(expect type: U.Type, receiveOn receivingQueue: DispatchQueue, callback: @escaping ResultCallback<U>)
     func make<T: Encodable, U: Decodable>(send some: T, expect type: U.Type, receiveOn queue: DispatchQueue, callback: @escaping ResultCallback<U>)
+}
+
+@available(iOS 15, *)
+public extension HTTPRequest {
+    func make<U: Decodable>(expect type: U.Type) async throws -> U {
+        var urlComponents = endpoint.urlComponents
+        urlComponents.queryItems = queryParams?.map { k, v in
+            URLQueryItem(name: k, value: v)
+        }
+        
+        var request = URLRequest(url: endpoint.url)
+        request.httpMethod = method.value
+        headers.forEach { k, v in
+            request.setValue(v, forHTTPHeaderField: k)
+        }
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw NetworkingError.badRequest
+        }
+        
+        let resultObject = try JSONDecoder().decode(type, from: data)
+        return resultObject
+    }
+    
+    func make<T: Encodable, U: Decodable>(send some: T, expect decodable: U.Type) async throws -> U {
+        var urlComponents = endpoint.urlComponents
+        urlComponents.queryItems = queryParams?.map { k, v in
+            URLQueryItem(name: k, value: v)
+        }
+        
+        var request = URLRequest(url: endpoint.url)
+        request.httpMethod = method.value
+        headers.forEach { k, v in
+            request.setValue(v, forHTTPHeaderField: k)
+        }
+        
+        let encodedBody = try JSONEncoder().encode(some)
+        request.httpBody = encodedBody
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw NetworkingError.badRequest
+        }
+        
+        let resultObject = try JSONDecoder().decode(decodable, from: data)
+        return resultObject
+    }
 }
 
 /// URLSession implementation.
