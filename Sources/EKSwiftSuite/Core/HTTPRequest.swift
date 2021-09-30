@@ -10,7 +10,7 @@ import Foundation
 public protocol Endpoint {
     static var baseURLPath: String { get }
     var path: String { get }
-    var url: URL { get }
+    var urlComponents: URLComponents { get }
 }
 
 public extension Endpoint {
@@ -54,7 +54,7 @@ public extension HTTPRequest {
             URLQueryItem(name: k, value: v)
         }
         
-        var request = URLRequest(url: endpoint.url)
+        var request = URLRequest(url: urlComponents.url!)
         request.httpMethod = method.value
         headers.forEach { k, v in
             request.setValue(v, forHTTPHeaderField: k)
@@ -76,7 +76,7 @@ public extension HTTPRequest {
             URLQueryItem(name: k, value: v)
         }
         
-        var request = URLRequest(url: endpoint.url)
+        var request = URLRequest(url: urlComponents.url!)
         request.httpMethod = method.value
         headers.forEach { k, v in
             request.setValue(v, forHTTPHeaderField: k)
@@ -99,7 +99,7 @@ public extension HTTPRequest {
 /// URLSession implementation.
 public extension HTTPRequest {
     func make<U: Decodable>(expect type: U.Type, receiveOn receivingQueue: DispatchQueue = .main, callback: @escaping ResultCallback<U>) {
-        var request = URLRequest(url: endpoint.url)
+        var request = URLRequest(url: endpoint.urlComponents.url!)
         request.httpMethod = method.value
         headers.forEach { k, v in
             request.setValue(v, forHTTPHeaderField: k)
@@ -150,7 +150,7 @@ public extension HTTPRequest {
     }
     
     func make<T: Encodable, U: Decodable>(send some: T, expect type: U.Type, receiveOn receivingQueue: DispatchQueue = .main, callback: @escaping ResultCallback<U>) {
-        var request = URLRequest(url: endpoint.url)
+        var request = URLRequest(url: endpoint.urlComponents.url!)
         request.httpMethod = method.value
         headers.forEach { k, v in
             request.setValue(v, forHTTPHeaderField: k)
