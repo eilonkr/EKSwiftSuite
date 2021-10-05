@@ -107,7 +107,7 @@ public extension LoadingViewController {
         public var infoText: String?
         public var appearance: Appearance
         
-        public init(animation: LoadingViewController.Animation, infoText: String? = nil, appearance: LoadingViewController.Appearance) {
+        public init(animation: LoadingViewController.Animation, infoText: String? = nil, appearance: LoadingViewController.Appearance = .default) {
             self.animation = animation
             self.infoText = infoText
             self.appearance = appearance
@@ -123,12 +123,19 @@ public extension LoadingViewController {
     }
     
     struct Appearance {
-        var backgroundStyle: BackgroundStyle
-        var backgroundOpaqueness: CGFloat
-        var tint: UIColor
-        var infoFont: UIFont?
+        public var backgroundStyle: BackgroundStyle
+        public var backgroundOpaqueness: CGFloat
+        public var tint: UIColor
+        public var infoFont: UIFont?
         
-        static var `default`: Appearance {
+        public init(backgroundStyle: LoadingViewController.BackgroundStyle, backgroundOpaqueness: CGFloat, tint: UIColor, infoFont: UIFont? = nil) {
+            self.backgroundStyle = backgroundStyle
+            self.backgroundOpaqueness = backgroundOpaqueness
+            self.tint = tint
+            self.infoFont = infoFont
+        }
+        
+        public static var `default`: Appearance {
             .init(
                 backgroundStyle: .color(.black),
                 backgroundOpaqueness: 0.55,
