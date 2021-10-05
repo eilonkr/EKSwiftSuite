@@ -100,14 +100,15 @@ public extension HTTPRequest {
 /// URLSession implementation.
 public extension HTTPRequest {
     func make<U: Decodable>(expect type: U.Type, receiveOn receivingQueue: DispatchQueue = .main, callback: @escaping ResultCallback<U>) {
-        var request = URLRequest(url: endpoint.urlComponents.url!)
+        var urlComponents = endpoint.urlComponents
+        urlComponents.queryItems = queryParams?.map { k, v in
+            URLQueryItem(name: k, value: v)
+        }
+        
+        var request = URLRequest(url: urlComponents.url!)
         request.httpMethod = method.value
         headers.forEach { k, v in
             request.setValue(v, forHTTPHeaderField: k)
-        }
-        
-        if let params = queryParams {
-            request.url = request.url?.applyingQueryParameters(params)
         }
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
@@ -131,9 +132,9 @@ public extension HTTPRequest {
             print("HTTP Status Code: \(httpResponse.statusCode)")
             #endif
             
-            if httpResponse.statusCode != 200 {
+            guard (200...299).contains(httpResponse.statusCode) else {
                 DispatchQueue.main.async {
-                    callback(.failure(NetworkingError.badRequest()))
+                    callback(.failure(NetworkingError.badRequest(httpResponse)))
                 }
                 return
             }
