@@ -103,11 +103,17 @@ public extension LoadingViewController {
     }
     
     struct Configuration {
-        var animation: Animation
-        var infoText: String?
-        var appearance: Appearance
+        public var animation: Animation
+        public var infoText: String?
+        public var appearance: Appearance
         
-        static var `default`: Configuration {
+        public init(animation: LoadingViewController.Animation, infoText: String? = nil, appearance: LoadingViewController.Appearance) {
+            self.animation = animation
+            self.infoText = infoText
+            self.appearance = appearance
+        }
+        
+        public static var `default`: Configuration {
             return Configuration(
                 animation: .indicator(.large),
                 infoText: "just a sec...",
