@@ -30,7 +30,7 @@ public extension Endpoint {
 open class HTTPClient<E: Endpoint> {
     public typealias ResultCallback<T> = (Result<T, Error>) -> Void
     
-    private func makeRequest(from endpoint: E, with body: AnyEncodable? = nil) -> Result<URLRequest, Error> {
+    private func makeRequest(from endpoint: E, with body: AnyEncodable? = nil) throws -> URLRequest {
         var urlComponents = endpoint.urlComponents
         urlComponents.queryItems = endpoint.queryParams?.map { k, v in
             URLQueryItem(name: k, value: v)
@@ -43,16 +43,11 @@ open class HTTPClient<E: Endpoint> {
         }
         
         if let body = body {
-            do {
-                let encodedBody = try JSONEncoder().encode(body)
-                request.httpBody = encodedBody
-                return .success(request)
-            } catch {
-                return .failure(error)
-            }
+            let encodedBody = try JSONEncoder().encode(body)
+            request.httpBody = encodedBody
         }
         
-        return .success(request)
+        return request
     }
     
     private func process(response: (data: Data?, urlResponse: URLResponse?, error: Error?)) -> Result<Data, Error> {
@@ -93,7 +88,7 @@ open class HTTPClient<E: Endpoint> {
     
     open func request(_ endpoint: E, callback: @escaping ResultCallback<Data>) {
         do {
-            let request = try makeRequest(from: endpoint).get()
+            let request = try makeRequest(from: endpoint)
             URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
                 guard let self = self else { return }
                 let processResult = self.process(response: (data, response, error))
@@ -110,7 +105,7 @@ open class HTTPClient<E: Endpoint> {
     
     open func request<T: Decodable>(_ endpoint: E, expect type: T.Type, callback: @escaping ResultCallback<T>) {
         do {
-            let request = try makeRequest(from: endpoint).get()
+            let request = try makeRequest(from: endpoint)
             URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
                 guard let self = self else { return }
                 switch self.process(response: (data, response, error)) {
@@ -134,7 +129,7 @@ open class HTTPClient<E: Endpoint> {
     
     open func make<T: Encodable, U: Decodable>(_ endpoint: E, send object: T, expect type: U.Type, receiveOn receivingQueue: DispatchQueue = .main, callback: @escaping ResultCallback<U>) {
         do {
-            let request = try makeRequest(from: endpoint, with: object.eraseToAnyEncodable()).get()
+            let request = try makeRequest(from: endpoint, with: object.eraseToAnyEncodable())
             URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
                 guard let self = self else { return }
                 switch self.process(response: (data, response, error)) {
@@ -161,51 +156,29 @@ open class HTTPClient<E: Endpoint> {
 
 @available(iOS 15, *)
 public extension HTTPClient {
-    func make<U: Decodable>(_ endpoint: E, expect type: U.Type) async throws -> U {
-        var urlComponents = endpoint.urlComponents
-        urlComponents.queryItems = endpoint.queryParams?.map { k, v in
-            URLQueryItem(name: k, value: v)
+    private func process(response: URLResponse) throws {
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NetworkingError.unknown
         }
-        
-        var request = URLRequest(url: urlComponents.url!)
-        request.httpMethod = endpoint.method.value
-        endpoint.headers?.forEach { k, v in
-            request.setValue(v, forHTTPHeaderField: k)
-        }
-        
-        let (data, response) = try await URLSession.shared.data(for: request)
-        let httpResponse = response as! HTTPURLResponse
         
         guard (200...299).contains(httpResponse.statusCode) else {
             throw NetworkingError.badRequest(httpResponse)
         }
-        
+    }
+    
+    func make<U: Decodable>(_ endpoint: E, expect type: U.Type) async throws -> U {
+        let request = try makeRequest(from: endpoint)
+        let (data, response) = try await URLSession.shared.data(for: request)
+        try process(response: response)
         let resultObject = try JSONDecoder().decode(type, from: data)
         return resultObject
     }
     
-    func make<T: Encodable, U: Decodable>(_ endpoint: E, send object: T, expect decodable: U.Type) async throws -> U {
-        var urlComponents = endpoint.urlComponents
-        urlComponents.queryItems = endpoint.queryParams?.map { k, v in
-            URLQueryItem(name: k, value: v)
-        }
-        
-        var request = URLRequest(url: urlComponents.url!)
-        request.httpMethod = endpoint.method.value
-        endpoint.headers?.forEach { k, v in
-            request.setValue(v, forHTTPHeaderField: k)
-        }
-        
-        let encodedBody = try JSONEncoder().encode(object)
-        request.httpBody = encodedBody
-        
+    func make<T: Encodable, U: Decodable>(_ endpoint: E, send object: T, expect type: U.Type) async throws -> U {
+        let request = try makeRequest(from: endpoint, with: object.eraseToAnyEncodable())
         let (data, response) = try await URLSession.shared.data(for: request)
-        guard let httpResponse = response as? HTTPURLResponse,
-              (200...299).contains(httpResponse.statusCode) else {
-            throw NetworkingError.badRequest()
-        }
-        
-        let resultObject = try JSONDecoder().decode(decodable, from: data)
+        try process(response: response)
+        let resultObject = try JSONDecoder().decode(type, from: data)
         return resultObject
     }
 }
