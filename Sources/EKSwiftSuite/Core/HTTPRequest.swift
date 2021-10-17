@@ -129,7 +129,7 @@ open class HTTPClient<E: Endpoint> {
         }
     }
     
-    open func make<T: Encodable, U: Decodable>(_ endpoint: E, send object: T, expect type: U.Type, receiveOn receivingQueue: DispatchQueue = .main, callback: @escaping ResultCallback<U>) {
+    open func request<T: Encodable, U: Decodable>(_ endpoint: E, send object: T, expect type: U.Type, receiveOn receivingQueue: DispatchQueue = .main, callback: @escaping ResultCallback<U>) {
         do {
             let request = try makeRequest(from: endpoint, with: object.eraseToAnyEncodable())
             URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
@@ -168,7 +168,7 @@ public extension HTTPClient {
         }
     }
     
-    func make<U: Decodable>(_ endpoint: E, expect type: U.Type) async throws -> U {
+    func request<U: Decodable>(_ endpoint: E, expect type: U.Type) async throws -> U {
         let request = try makeRequest(from: endpoint)
         let (data, response) = try await URLSession.shared.data(for: request)
         try process(response: response)
@@ -176,7 +176,7 @@ public extension HTTPClient {
         return resultObject
     }
     
-    func make<T: Encodable, U: Decodable>(_ endpoint: E, send object: T, expect type: U.Type) async throws -> U {
+    func request<T: Encodable, U: Decodable>(_ endpoint: E, send object: T, expect type: U.Type) async throws -> U {
         let request = try makeRequest(from: endpoint, with: object.eraseToAnyEncodable())
         let (data, response) = try await URLSession.shared.data(for: request)
         try process(response: response)
