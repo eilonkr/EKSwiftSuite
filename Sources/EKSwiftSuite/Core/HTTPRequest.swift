@@ -30,6 +30,8 @@ public extension Endpoint {
 open class HTTPClient<E: Endpoint> {
     public typealias ResultCallback<T> = (Result<T, Error>) -> Void
     
+    public init() { }
+    
     private func makeRequest(from endpoint: E, with body: AnyEncodable? = nil) throws -> URLRequest {
         var urlComponents = endpoint.urlComponents
         urlComponents.queryItems = endpoint.queryParams?.map { k, v in
