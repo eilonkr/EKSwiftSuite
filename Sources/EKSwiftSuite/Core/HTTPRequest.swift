@@ -19,6 +19,13 @@ public protocol Endpoint {
     var urlComponents: URLComponents { get }
 }
 
+public protocol DownloadEndpoint: Endpoint { }
+extension DownloadEndpoint {
+    public var method: HTTPMethod { .get }
+    public var headers: [String : String]? { nil }
+    public var queryParams: [String : String]? { nil }
+}
+
 public extension Endpoint {
     var urlComponents: URLComponents {
         var urlComponents = URLComponents(string: baseURLPath)!
@@ -52,7 +59,7 @@ open class HTTPClient<E: Endpoint> {
         return request
     }
     
-    private func process(response: (data: Data?, urlResponse: URLResponse?, error: Error?)) -> Result<Data, Error> {
+    private func process<T>(response: (item: T?, urlResponse: URLResponse?, error: Error?)) -> Result<T, Error> {
         if let error = response.error {
             return .failure(error)
         }
@@ -60,7 +67,7 @@ open class HTTPClient<E: Endpoint> {
         guard
             let _httpResponse = response.urlResponse,
             let httpResponse = _httpResponse as? HTTPURLResponse,
-            let data = response.data
+            let item = response.item
         else {
             return .failure(NetworkingError.unknown)
         }
@@ -73,7 +80,7 @@ open class HTTPClient<E: Endpoint> {
             return .failure(NetworkingError.badRequest(httpResponse))
         }
         
-        return .success(data)
+        return .success(item)
     }
     
     private func decode<T: Decodable>(_ type: T.Type, from data: Data) -> Result<T, Error> {
@@ -154,6 +161,38 @@ open class HTTPClient<E: Endpoint> {
     }
 }
 
+// MARK: - Download tasks
+
+public extension HTTPClient {
+    func download(from endpoint: E, storeAt destinationURL: URL?, callback: @escaping ResultCallback<Data>) {
+        do {
+            let request = try makeRequest(from: endpoint)
+            let downloadTask = URLSession.shared.downloadTask(with: request) { [weak self] url, response, error in
+                guard let self = self else { return }
+                do {
+                    let tempURL = try self.process(response: (url, response, error)).get()
+                    let data = try Data(contentsOf: tempURL)
+                    callback(.success(data))
+                    
+                    if let url = destinationURL {
+                        try FileManager.default.moveItem(at: tempURL, to: url)
+                    }
+                    
+                } catch {
+                    DispatchQueue.main.async {
+                        callback(.failure(error))
+                    }
+                }
+            }
+            
+            downloadTask.resume()
+            
+        } catch {
+            callback(.failure(error))
+        }
+    }
+}
+
 // MARK: - iOS 15 Concurrency API
 
 @available(iOS 15, *)
@@ -182,5 +221,18 @@ public extension HTTPClient {
         try process(response: response)
         let resultObject = try JSONDecoder().decode(type, from: data)
         return resultObject
+    }
+    
+    func download(from endpoint: E, storeAt destinationURL: URL?) async throws -> Data {
+        let request = try makeRequest(from: endpoint)
+        let (url, response) = try await URLSession.shared.download(for: request)
+        try process(response: response)
+        
+        if let destinationURL = destinationURL {
+            try FileManager.default.moveItem(at: url, to: destinationURL)
+            return try Data(contentsOf: destinationURL)
+        }
+        
+        return try Data(contentsOf: url)
     }
 }
