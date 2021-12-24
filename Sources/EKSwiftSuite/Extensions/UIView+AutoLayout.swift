@@ -10,7 +10,7 @@ public typealias EdgeInsets = NSEdgeInsets
 #endif
 
 public extension View {
-    func fix(in container: View, padding: EdgeInsets = .zero) {
+    func fix(in container: View, padding: EdgeInsets = .init()) {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.frame = container.frame
         container.addSubview(self)
