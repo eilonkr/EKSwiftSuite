@@ -1,4 +1,5 @@
 
+#if !os(macOS)
 import UIKit
 
 public extension CALayer {
@@ -45,3 +46,4 @@ public extension CALayer {
         shadowOffset = CGSize(width: offsetX, height: offsetY)
     }
 }
+#endif

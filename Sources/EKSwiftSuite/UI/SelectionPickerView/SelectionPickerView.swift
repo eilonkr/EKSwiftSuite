@@ -5,6 +5,8 @@
 //  Created by Eilon Krauthammer on 15/04/2021.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 public protocol SelectionItem {
@@ -160,3 +162,4 @@ open class SelectionPickerView<Item: SelectionItem>: UIView {
         onSelect?(item)
     }
 }
+#endif

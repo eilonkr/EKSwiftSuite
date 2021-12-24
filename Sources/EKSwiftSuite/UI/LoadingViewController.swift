@@ -5,6 +5,8 @@
 //  Created by Eilon Krauthammer on 13/06/2021.
 //
 
+#if !os(macOS)
+
 import UIKit
 //import Lottie
 
@@ -145,3 +147,4 @@ public extension LoadingViewController {
         }
     }
 }
+#endif

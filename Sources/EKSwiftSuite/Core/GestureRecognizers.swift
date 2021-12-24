@@ -5,6 +5,7 @@
 //  Created by Eilon Krauthammer on 14/03/2021.
 //
 
+#if !os(macOS)
 import UIKit
 
 /// This class by default sets `cancelsTouchesInView` to `false`.
@@ -18,3 +19,4 @@ final class SmartPressGestureRecogizer: UILongPressGestureRecognizer {
         self.cancelsTouchesInView = false
     }
 }
+#endif

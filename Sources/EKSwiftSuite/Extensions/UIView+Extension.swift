@@ -1,4 +1,5 @@
 
+#if !os(macOS)
 import UIKit
 
 public extension UIView {
@@ -65,3 +66,4 @@ public extension UIView {
     }
     
 }
+#endif

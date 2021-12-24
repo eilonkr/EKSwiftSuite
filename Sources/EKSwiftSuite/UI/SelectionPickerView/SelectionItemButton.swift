@@ -5,6 +5,8 @@
 //  Created by Eilon Krauthammer on 15/04/2021.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 final class SelectionItemButton: SpringButton {
@@ -44,3 +46,4 @@ final class SelectionItemButton: SpringButton {
     }
     
 }
+#endif

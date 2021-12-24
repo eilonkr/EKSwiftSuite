@@ -1,4 +1,6 @@
 
+#if !os(macOS)
+
 import UIKit
 
 // UI related Value Types
@@ -34,3 +36,4 @@ public extension UIEdgeInsets {
         self = UIEdgeInsets(top: vertical, left: horizontal, bottom: vertical, right: horizontal)
     }
 }
+#endif

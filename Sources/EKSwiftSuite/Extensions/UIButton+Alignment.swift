@@ -5,6 +5,7 @@
 //  Created by Eilon Krauthammer on 17/03/2021.
 //
 
+#if !os(macOS)
 import UIKit
 
 @objc public extension UIButton {
@@ -96,3 +97,4 @@ import UIKit
         }
     }
 }
+#endif

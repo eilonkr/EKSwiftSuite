@@ -5,6 +5,8 @@
 //  Created by Eilon Krauthammer on 16/05/2021.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 final class MaskingImageView: UIImageView {
@@ -28,3 +30,4 @@ final class MaskingImageView: UIImageView {
         mask = maskImageView
     }
 }
+#endif

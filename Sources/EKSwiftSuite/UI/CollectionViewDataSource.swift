@@ -5,6 +5,8 @@
 //  Created by Eilon Krauthammer on 16/04/2021.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 open class CollectionViewDataSource<Cell: UICollectionViewCell & Providable>: NSObject, UICollectionViewDataSource {
@@ -35,3 +37,4 @@ open class CollectionViewDataSource<Cell: UICollectionViewCell & Providable>: NS
         return cell
     }
 }
+#endif

@@ -5,6 +5,8 @@
 //  Created by Eilon Krauthammer on 17/01/2021.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 public struct Gradient: Equatable {
@@ -69,3 +71,4 @@ public extension Gradient {
     }
 }
 
+#endif

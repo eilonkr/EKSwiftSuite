@@ -5,6 +5,8 @@
 //  Created by Eilon Krauthammer on 17/03/2021.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 open class SheetTransition: NSObject, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning {
@@ -101,3 +103,4 @@ open class SheetTransition: NSObject, UIViewControllerTransitioningDelegate, UIV
     }
     
 }
+#endif

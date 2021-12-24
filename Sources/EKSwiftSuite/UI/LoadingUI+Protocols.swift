@@ -4,6 +4,8 @@
 //
 //  Created by Eilon Krauthammer on 03/08/2021.
 //
+#if !os(macOS)
+
 
 import UIKit
 //import Lottie
@@ -57,3 +59,4 @@ public extension UILoadable where Self: UIViewController {
         }
     }
 }
+#endif

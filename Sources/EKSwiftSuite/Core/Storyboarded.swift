@@ -5,6 +5,7 @@
 //  Created by Eilon Krauthammer on 18/11/2020.
 //
 
+#if !os(macOS)
 import UIKit
 
 protocol Storyboarded {
@@ -18,3 +19,4 @@ extension Storyboarded where Self: UIViewController {
         return storyboard.instantiateViewController(withIdentifier: id) as! Self
     }
 }
+#endif

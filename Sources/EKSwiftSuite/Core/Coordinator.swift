@@ -1,4 +1,5 @@
 
+#if !os(macOS)
 import UIKit
 
 public protocol Coordinator: AnyObject {
@@ -47,3 +48,4 @@ open class BaseCoordinator<V: UIViewController>: Coordinator, CoordinatorDelegat
         
     }
 }
+#endif

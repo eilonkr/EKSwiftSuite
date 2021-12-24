@@ -5,6 +5,8 @@
 //  Created by Eilon Krauthammer on 17/03/2021.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 open class AutoSizingTableView: UITableView {
@@ -27,3 +29,4 @@ open class AutoSizingTableView: UITableView {
         super.awakeFromNib()
     }
 }
+#endif

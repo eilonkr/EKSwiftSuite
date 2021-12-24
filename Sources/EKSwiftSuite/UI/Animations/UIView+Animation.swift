@@ -5,6 +5,7 @@
 //  Created by Eilon Krauthammer on 29/03/2021.
 //
 
+#if !os(macOS)
 import UIKit
 
 public extension UIView {
@@ -45,3 +46,4 @@ extension UIView {
         ])
     }
 }
+#endif

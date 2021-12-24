@@ -4,6 +4,7 @@
 //
 //  Created by Eilon Krauthammer on 22/04/2021.
 //
+#if !os(macOS)
 
 import UIKit
 import AVFoundation
@@ -27,3 +28,4 @@ open class PlayerView: UIView {
         return AVPlayerLayer.self
     }
 }
+#endif

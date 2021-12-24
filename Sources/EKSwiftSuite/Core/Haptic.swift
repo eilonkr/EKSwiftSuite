@@ -1,4 +1,5 @@
 
+#if !os(macOS)
 import UIKit
 
 public enum Haptic {
@@ -25,10 +26,4 @@ public enum Haptic {
         }
     }
 }
-
-
-
-
-
-
-
+#endif

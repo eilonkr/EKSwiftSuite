@@ -1,9 +1,15 @@
 
+#if !os(macOS)
 import UIKit
+typealias Color = UIColor
+#else
+import AppKit
+typealias Color = NSColor
+#endif
 
 
 //swiftlint:enable identifier_name
-public extension UIColor {
+public extension Color {
 
     var luminance: CGFloat {
         var red: CGFloat = 0.0
@@ -51,7 +57,7 @@ public extension UIColor {
     
 }
 
-public extension UIColor {
+public extension Color {
     
     // MARK: - Initialization
     

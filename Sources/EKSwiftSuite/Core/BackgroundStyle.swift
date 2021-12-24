@@ -5,6 +5,7 @@
 //  Created by Eilon Krauthammer on 18/06/2021.
 //
 
+#if !os(macOS)
 import UIKit
 
 public enum BackgroundStyle {
@@ -25,3 +26,4 @@ public enum BackgroundStyle {
         return nil
     }
 }
+#endif

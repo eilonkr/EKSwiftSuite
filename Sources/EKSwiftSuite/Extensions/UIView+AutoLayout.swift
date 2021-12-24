@@ -1,8 +1,14 @@
 
+#if !os(macOS)
 import UIKit
+public typealias View = UIView
+#else
+import AppKit
+public typealias View = NSView
+#endif
 
-public extension UIView {
-    func fix(in container: UIView, padding: UIEdgeInsets = .zero) {
+public extension View {
+    func fix(in container: View, padding: UIEdgeInsets = .zero) {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.frame = container.frame
         container.addSubview(self)
@@ -23,7 +29,7 @@ public extension UIView {
         self.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: aspectRatio).isActive = true
     }
     
-    func center(in view: UIView) {
+    func center(in view: View) {
         translatesAutoresizingMaskIntoConstraints = false
         centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true

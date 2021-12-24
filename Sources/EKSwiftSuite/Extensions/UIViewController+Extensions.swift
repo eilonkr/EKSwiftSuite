@@ -5,6 +5,8 @@
 //  Created by Eilon Krauthammer on 05/06/2021.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 public extension UIViewController {
@@ -32,3 +34,4 @@ public extension UIViewController {
           didMove(toParent: parentVc)
     }
 }
+#endif

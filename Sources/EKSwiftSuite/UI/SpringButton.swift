@@ -5,6 +5,8 @@
 //  Created by Eilon Krauthammer on 14/03/2021.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 open class SpringButton: UIButton, SpringableView {
@@ -27,3 +29,4 @@ open class SpringButton: UIButton, SpringableView {
         addSpringOnTap()
     }
 }
+#endif

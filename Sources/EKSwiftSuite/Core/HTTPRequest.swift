@@ -235,4 +235,29 @@ public extension HTTPClient {
         
         return try Data(contentsOf: url)
     }
+    
+    func request<T: Decodable>(_ type: T.Type, from endpointURL: URL) async throws -> T? {
+        let request = URLRequest(url: endpointURL)
+        let (data, _) = try await URLSession.shared.data(for: request)
+        return try JSONDecoder().decode(T.self, from: data)
+    }
+    
+    func regularOperation(_ completion: @escaping (Data?, Error?) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            completion(Data(), nil)
+        }
+    }
+    
+    private func request<T: Decodable>(_ type: T.Type) async throws -> T {
+        return try await withCheckedThrowingContinuation { continuation in
+            regularOperation { data, error in
+                if let data = data, let obj = try? JSONDecoder().decode(type, from: data) {
+                    continuation.resume(returning: obj)
+                } else if let error = error {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+    
 }
