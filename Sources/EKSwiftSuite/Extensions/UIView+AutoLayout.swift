@@ -2,13 +2,15 @@
 #if !os(macOS)
 import UIKit
 public typealias View = UIView
+public typealias EdgeInsets = UIEdgeInsets
 #else
 import AppKit
 public typealias View = NSView
+public typealias EdgeInsets = NSEdgeInsets
 #endif
 
 public extension View {
-    func fix(in container: View, padding: UIEdgeInsets = .zero) {
+    func fix(in container: View, padding: EdgeInsets = .zero) {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.frame = container.frame
         container.addSubview(self)
