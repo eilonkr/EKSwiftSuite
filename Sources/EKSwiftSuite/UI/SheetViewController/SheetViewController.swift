@@ -5,6 +5,8 @@
 //  Created by Eilon Krauthammer on 17/03/2021.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 public enum DismissState {
@@ -194,3 +196,5 @@ extension SheetViewController: UIGestureRecognizerDelegate {
         return gestureRecognizer.view === touch.view
     }
 }
+#endif
+
