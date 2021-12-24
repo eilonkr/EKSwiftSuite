@@ -195,7 +195,7 @@ public extension HTTPClient {
 
 // MARK: - iOS 15 Concurrency API
 
-@available(iOS 15, *)
+@available(iOS 15, macOS 12, *)
 public extension HTTPClient {
     private func process(response: URLResponse) throws {
         guard let httpResponse = response as? HTTPURLResponse else {
