@@ -10,9 +10,17 @@ import UIKit
 import AVFoundation
 
 open class PlayerView: UIView {
-    public var player: AVPlayer? {
+    public var shouldLoop: Bool = true {
+        didSet {
+            configureLooping()
+        }
+    }
+    
+    private var playerLooper: AVPlayerLooper?
+    
+    public var player: AVQueuePlayer? {
         get {
-            return playerLayer?.player
+            return playerLayer?.player as? AVQueuePlayer
         }
         set {
             playerLayer?.videoGravity = .resizeAspectFill
@@ -24,8 +32,23 @@ open class PlayerView: UIView {
         return layer as? AVPlayerLayer
     }
     
+    // Override UIView property
     override public static var layerClass: AnyClass {
         return AVPlayerLayer.self
     }
+    
+    open override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        configureLooping()
+    }
+    
+    private func configureLooping() {
+        if shouldLoop, let player = player, let playerItem = player.currentItem {
+            playerLooper = AVPlayerLooper(player: player, templateItem: playerItem)
+        } else {
+            playerLooper = nil
+        }
+    }
 }
+
 #endif
