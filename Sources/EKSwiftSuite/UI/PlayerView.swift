@@ -38,10 +38,10 @@ open class PlayerView: UIView {
         return AVPlayerLayer.self
     }
     
-    open override func didMoveToSuperview() {
-        super.didMoveToSuperview()
-        configureLooping()
-    }
+//    open override func didMoveToSuperview() {
+//        super.didMoveToSuperview()
+//        configureLooping()
+//    }
     
     private func configureLooping() {
         if shouldLoop, let player = player, let playerItem = player.currentItem {
