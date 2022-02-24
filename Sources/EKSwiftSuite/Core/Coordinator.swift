@@ -21,7 +21,7 @@ public extension CoordinatorDelegate where Self: Coordinator {
 
 // MARK: - BaseCoordinator
 
-open class BaseCoordinator<V: UIViewController>: Coordinator, CoordinatorDelegate {
+open class BaseCoordinator<V: UIViewController>: NSObject, Coordinator, CoordinatorDelegate {
 
     open unowned var rootViewController: V
     private var childCoordinators: [Coordinator] = []
