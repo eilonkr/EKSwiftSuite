@@ -25,6 +25,7 @@ open class PlayerView: UIView {
         set {
             playerLayer?.videoGravity = .resizeAspectFill
             playerLayer?.player = newValue
+            configureLooping()
         }
     }
     
