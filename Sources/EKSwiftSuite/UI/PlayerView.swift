@@ -18,6 +18,14 @@ open class PlayerView: UIView {
     
     private var playerLooper: AVPlayerLooper?
     
+    public var isMuted: Bool {
+        get {
+            player?.isMuted == true
+        } set {
+            player?.isMuted = newValue
+        }
+    }
+    
     public var player: AVQueuePlayer? {
         get {
             return playerLayer?.player as? AVQueuePlayer
