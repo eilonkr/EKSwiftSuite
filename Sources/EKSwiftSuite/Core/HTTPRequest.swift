@@ -236,6 +236,17 @@ public extension HTTPClient {
         return try Data(contentsOf: url)
     }
     
+    func download(from sourceURL: URL, storeAt destinationURL: URL?) async throws -> Data {
+        let (url, response) = try await URLSession.shared.download(from: sourceURL)
+        try process(response: response)
+        if let destinationURL = destinationURL {
+            try FileManager.default.moveItem(at: url, to: destinationURL)
+            return try Data(contentsOf: destinationURL)
+        }
+        
+        return try Data(contentsOf: url)
+    }
+    
     func request<T: Decodable>(_ type: T.Type, from endpointURL: URL) async throws -> T? {
         let request = URLRequest(url: endpointURL)
         let (data, _) = try await URLSession.shared.data(for: request)
