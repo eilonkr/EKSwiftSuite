@@ -259,5 +259,4 @@ public extension HTTPClient {
             }
         }
     }
-    
 }
