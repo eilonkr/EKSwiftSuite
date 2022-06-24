@@ -34,12 +34,12 @@ public extension Endpoint {
     }
 }
 
-open class HTTPClient<E: Endpoint> {
+open class HTTPClient {
     public typealias ResultCallback<T> = (Result<T, Error>) -> Void
     
     public init() { }
     
-    private func makeRequest(from endpoint: E, with body: AnyEncodable? = nil) throws -> URLRequest {
+    private func makeRequest(from endpoint: some Endpoint, with body: (any Encodable)? = nil) throws -> URLRequest {
         var urlComponents = endpoint.urlComponents
         urlComponents.queryItems = endpoint.queryParams?.map { k, v in
             URLQueryItem(name: k, value: v)
@@ -95,7 +95,7 @@ open class HTTPClient<E: Endpoint> {
     
     // MARK: - Common expect & send requests
     
-    open func request(_ endpoint: E, callback: @escaping ResultCallback<Data>) {
+    open func request(_ endpoint: some Endpoint, callback: @escaping ResultCallback<Data>) {
         do {
             let request = try makeRequest(from: endpoint)
             URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
@@ -112,7 +112,7 @@ open class HTTPClient<E: Endpoint> {
         }
     }
     
-    open func request<T: Decodable>(_ endpoint: E, expect type: T.Type, callback: @escaping ResultCallback<T>) {
+    open func request<T: Decodable>(_ endpoint: some Endpoint, expect type: T.Type, callback: @escaping ResultCallback<T>) {
         do {
             let request = try makeRequest(from: endpoint)
             URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
@@ -136,9 +136,9 @@ open class HTTPClient<E: Endpoint> {
         }
     }
     
-    open func request<T: Encodable, U: Decodable>(_ endpoint: E, send object: T, expect type: U.Type, receiveOn receivingQueue: DispatchQueue = .main, callback: @escaping ResultCallback<U>) {
+    open func request<T: Encodable, U: Decodable>(_ endpoint: some Endpoint, send object: T, expect type: U.Type, receiveOn receivingQueue: DispatchQueue = .main, callback: @escaping ResultCallback<U>) {
         do {
-            let request = try makeRequest(from: endpoint, with: object.eraseToAnyEncodable())
+            let request = try makeRequest(from: endpoint, with: object)
             URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
                 guard let self = self else { return }
                 switch self.process(response: (data, response, error)) {
@@ -164,7 +164,7 @@ open class HTTPClient<E: Endpoint> {
 // MARK: - Download tasks
 
 public extension HTTPClient {
-    func download(from endpoint: E, storeAt destinationURL: URL?, callback: @escaping ResultCallback<Data>) {
+    func download(from endpoint: some Endpoint, storeAt destinationURL: URL?, callback: @escaping ResultCallback<Data>) {
         do {
             let request = try makeRequest(from: endpoint)
             let downloadTask = URLSession.shared.downloadTask(with: request) { [weak self] url, response, error in
@@ -207,7 +207,7 @@ public extension HTTPClient {
         }
     }
     
-    func request<U: Decodable>(_ endpoint: E, expect type: U.Type) async throws -> U {
+    func request<U: Decodable>(_ endpoint: some Endpoint, expect type: U.Type) async throws -> U {
         let request = try makeRequest(from: endpoint)
         let (data, response) = try await URLSession.shared.data(for: request)
         try process(response: response)
@@ -215,7 +215,7 @@ public extension HTTPClient {
         return resultObject
     }
     
-    func request<T: Encodable, U: Decodable>(_ endpoint: E, send object: T, expect type: U.Type) async throws -> U {
+    func request<U: Decodable>(_ endpoint: some Endpoint, send object: some Encodable, expect type: U.Type) async throws -> U {
         let request = try makeRequest(from: endpoint, with: object.eraseToAnyEncodable())
         let (data, response) = try await URLSession.shared.data(for: request)
         try process(response: response)
@@ -223,7 +223,7 @@ public extension HTTPClient {
         return resultObject
     }
     
-    func download(from endpoint: E, storeAt destinationURL: URL?) async throws -> Data {
+    func download(from endpoint: some Endpoint, storeAt destinationURL: URL?) async throws -> Data {
         let request = try makeRequest(from: endpoint)
         let (url, response) = try await URLSession.shared.download(for: request)
         try process(response: response)
