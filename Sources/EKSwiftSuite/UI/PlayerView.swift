@@ -47,8 +47,12 @@ open class PlayerView: UIView {
     }
     
     init(asset: AVURLAsset) {
-        super.init()
+        super.init(frame: .zero)
         self.player = AVQueuePlayer(url: asset.url)
+    }
+    
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
     }
     
     private func configureLooping() {
