@@ -46,6 +46,10 @@ open class PlayerView: UIView {
         return AVPlayerLayer.self
     }
     
+    public init() {
+        super.init(frame: .zero)
+    }
+    
     public init(asset: AVURLAsset) {
         super.init(frame: .zero)
         self.player = AVQueuePlayer(url: asset.url)
