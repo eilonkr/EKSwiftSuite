@@ -46,6 +46,11 @@ open class PlayerView: UIView {
         return AVPlayerLayer.self
     }
     
+    init(asset: AVURLAsset) {
+        super.init()
+        self.player = AVQueuePlayer(url: asset.url)
+    }
+    
     private func configureLooping() {
         if shouldLoop, let player = player, let playerItem = player.currentItem {
             playerLooper = AVPlayerLooper(player: player, templateItem: playerItem)
