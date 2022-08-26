@@ -25,20 +25,6 @@ enum MediaType {
     }
 }
 
-enum AssetState {
-    case fetching(Progress)
-    case ready(Asset)
-    
-    var asset: Asset? {
-        switch self {
-        case .fetching:
-            return nil
-        case .ready(let asset):
-            return asset
-        }
-    }
-}
-
 public enum Asset: Identifiable {
     case image(UIImage)
     case video(AVAsset)

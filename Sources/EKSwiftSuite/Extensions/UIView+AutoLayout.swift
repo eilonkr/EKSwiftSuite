@@ -1,16 +1,16 @@
 
 #if !os(macOS)
 import UIKit
-public typealias View = UIView
+public typealias ViewType = UIView
 public typealias EdgeInsets = UIEdgeInsets
 #else
 import AppKit
-public typealias View = NSView
+public typealias ViewType = NSView
 public typealias EdgeInsets = NSEdgeInsets
 #endif
 
-public extension View {
-    func fix(in container: View, padding: EdgeInsets = .init()) {
+public extension ViewType {
+    func fix(in container: ViewType, padding: EdgeInsets = .init()) {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.frame = container.frame
         container.addSubview(self)
@@ -31,7 +31,7 @@ public extension View {
         self.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: aspectRatio).isActive = true
     }
     
-    func center(in view: View) {
+    func center(in view: ViewType) {
         translatesAutoresizingMaskIntoConstraints = false
         centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
