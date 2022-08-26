@@ -39,15 +39,15 @@ enum AssetState {
     }
 }
 
-enum Asset: Identifiable {
+public enum Asset: Identifiable {
     case image(UIImage)
     case video(AVAsset)
     
-    var id: String {
+    public var id: String {
         return analyticsDescription
     }
     
-    var isImage: Bool {
+    public var isImage: Bool {
         switch self {
             case .image(_):
                 return true
@@ -56,7 +56,7 @@ enum Asset: Identifiable {
         }
     }
     
-    var isVideo: Bool? {
+    public var isVideo: Bool? {
         switch self {
             case .image(_):
                 return false
@@ -65,7 +65,7 @@ enum Asset: Identifiable {
         }
     }
     
-    var aspectRatio: CGFloat {
+    public var aspectRatio: CGFloat {
         switch self {
             case .image(let image):
                 return image.size.width / image.size.height
@@ -78,7 +78,7 @@ enum Asset: Identifiable {
         }
     }
     
-    var shareItem: Any {
+    public var shareItem: Any {
         switch self {
         case .image(let image):
             return image
@@ -88,7 +88,7 @@ enum Asset: Identifiable {
         }
     }
     
-    var analyticsDescription: String {
+    public var analyticsDescription: String {
         switch self {
         case .image:
             return "image"

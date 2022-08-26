@@ -6,9 +6,8 @@
 //
 
 import UIKit
-import EKSwiftSuite
 
-class GradientButton: SpringButton {
+public class GradientButton: SpringButton {
     
     private lazy var gradientView = GradientView(gradient: .init(direction: .horizontal, colors: [.red]))
     
@@ -33,14 +32,14 @@ class GradientButton: SpringButton {
         }
     }
     
-    override func didMoveToSuperview() {
+    public override func didMoveToSuperview() {
         super.didMoveToSuperview()
         addSubview(gradientView)
         gradientView.isUserInteractionEnabled = false
         applyShadow(color: shadowColor, radius: 8.0, opacity: 1.0, offsetY: 4.0)
     }
     
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         if usesRoundedCorners {
             roundCorners(to: .rounded)

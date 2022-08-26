@@ -8,8 +8,8 @@
 import UIKit
 import AVFoundation
 
-class MediaView: UIView {
-    enum Style {
+public class MediaView: UIView {
+    public enum Style {
         case none
         case border
     }
@@ -22,13 +22,13 @@ class MediaView: UIView {
     
     public var style: Style
     
-    var currentVideoTime: CMTime? {
+    public var currentVideoTime: CMTime? {
         (currentView as? PlayerView)?.player?.currentTime()
     }
     
     private var currentView: UIView?
     
-    var isVideoMuted: Bool {
+    public var isVideoMuted: Bool {
         get {
             (currentView as? PlayerView)?.isMuted == true
         } set {
@@ -36,7 +36,7 @@ class MediaView: UIView {
         }
     }
     
-    init(asset: Asset, style: Style = .none) {
+    public init(asset: Asset, style: Style = .none) {
         self.asset = asset
         self.style = style
         super.init(frame: .zero)
