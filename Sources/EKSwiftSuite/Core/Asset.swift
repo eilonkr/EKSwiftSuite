@@ -82,18 +82,4 @@ public enum Asset: Identifiable, Equatable {
             return "video"
         }
     }
-    
-    public static func == (lhs: Asset, rhs: Asset) -> Bool {
-        switch (lhs, rhs) {
-        case (.image(let im1), .image(let im2)):
-            return im1.isEqual(to: im2)
-        case (.video(let asset1), .video(let asset2)):
-            if let urlAsset1 = asset1 as? AVURLAsset, let urlAsset2 = asset2 as? AVURLAsset {
-                return urlAsset1.url == urlAsset2.url
-            }
-            return false
-        default:
-            return false
-        }
-    }
 }
