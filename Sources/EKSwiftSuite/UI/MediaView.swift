@@ -8,6 +8,7 @@
 import UIKit
 import AVFoundation
 
+#if !os(macOS)
 public class MediaView: UIView {
     public enum Style {
         case none
@@ -99,3 +100,4 @@ public class MediaView: UIView {
         playerView.player?.seek(to: time)
     }
 }
+#endif
