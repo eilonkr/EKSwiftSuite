@@ -5,10 +5,10 @@
 //  Created by Eilon Krauthammer on 10/03/2022.
 //
 
+#if !os(macOS)
 import UIKit
 import AVFoundation
 
-#if !os(macOS)
 public class MediaView: UIView {
     public enum Style {
         case none
