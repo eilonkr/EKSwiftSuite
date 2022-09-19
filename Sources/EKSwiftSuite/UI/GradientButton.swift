@@ -5,6 +5,7 @@
 //  Created by Eilon Krauthammer on 22/04/2021.
 //
 
+#if !os(macOS)
 import UIKit
 
 public class GradientButton: SpringButton {
@@ -50,3 +51,4 @@ public class GradientButton: SpringButton {
     }
     
 }
+#endif
