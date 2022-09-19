@@ -5,6 +5,7 @@
 //  Created by Eilon Krauthammer on 23/02/2022.
 //
 
+#if !os(macOS)
 import UIKit
 import AVFoundation
 
@@ -83,3 +84,4 @@ public enum Asset: Identifiable, Equatable {
         }
     }
 }
+#endif
