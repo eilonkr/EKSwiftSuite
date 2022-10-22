@@ -107,7 +107,7 @@ open class SelectionPickerView<Item: SelectionItem>: UIView {
         
         for itemButton in (items.map { SelectionItemButton(item: $0) }) {
             itemsStack.addArrangedSubview(itemButton)
-            itemButton.addTarget(self, action: #selector(itemButtonTapped), for: .touchUpInside)
+//            itemButton.addTarget(self, action: #selector(itemButtonTapped), for: .touchUpInside)
         }
     }
     
@@ -155,11 +155,11 @@ open class SelectionPickerView<Item: SelectionItem>: UIView {
         }
     }
     
-    @objc private func itemButtonTapped(_ sender: SelectionItemButton) {
-        Haptic.selection.generate()
-        guard let item = sender.selectionItem as? Item else { return }
-        selectedItem = item
-        onSelect?(item)
-    }
+//    @objc private func itemButtonTapped(_ sender: SelectionItemButton) {
+////        Haptic.selection.generate()
+////        guard let item = sender.selectionItem as? Item else { return }
+////        selectedItem = item
+////        onSelect?(item)
+//    }
 }
 #endif
