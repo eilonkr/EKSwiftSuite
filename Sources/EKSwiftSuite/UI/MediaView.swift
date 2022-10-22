@@ -5,6 +5,7 @@
 //  Created by Eilon Krauthammer on 10/03/2022.
 //
 
+#if !os(macOS)
 import UIKit
 import AVFoundation
 
@@ -99,3 +100,4 @@ public class MediaView: UIView {
         playerView.player?.seek(to: time)
     }
 }
+#endif
