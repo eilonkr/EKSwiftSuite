@@ -46,16 +46,17 @@ public extension UILoadable where Self: UIViewController {
         }
     }
     
-    func dismissLoadingOverlay(duration: TimeInterval = 0.2) {
+    func dismissLoadingOverlay(duration: TimeInterval = 0.2, completion: (() -> Void)? = nil) {
         if let child = children.first(where: { $0 is LoadingViewController } ) {
             child.view.superview?.isUserInteractionEnabled = true
             UIView.animate(withDuration: duration) {
                 child.view.alpha = 0.0
             } completion: { _ in
                 child.removeChildViewController()
+                completion?()
             }
         } else if let loadingViewController = presentedViewController as? LoadingViewController {
-            loadingViewController.dismiss(animated: true, completion: nil)
+            loadingViewController.dismiss(animated: true, completion: completion)
         }
     }
 }
