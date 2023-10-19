@@ -27,7 +27,7 @@ enum MediaType {
 }
 
 public enum Asset: Identifiable, Equatable {
-    case image(UIImage)
+    case image(UIImage, URL)
     case video(AVAsset)
     
     public var id: String {
@@ -36,7 +36,7 @@ public enum Asset: Identifiable, Equatable {
     
     public var isImage: Bool {
         switch self {
-            case .image(_):
+            case .image(_, _):
                 return true
             case .video(_):
                 return false
@@ -45,7 +45,7 @@ public enum Asset: Identifiable, Equatable {
     
     public var isVideo: Bool? {
         switch self {
-            case .image(_):
+            case .image(_, _):
                 return false
             case .video(_):
                 return true
@@ -54,7 +54,7 @@ public enum Asset: Identifiable, Equatable {
     
     public var aspectRatio: CGFloat {
         switch self {
-            case .image(let image):
+            case .image(let image, _):
                 return image.size.width / image.size.height
             case .video(let asset):
                 if let track = asset.tracks(withMediaType: .video).first {
@@ -67,7 +67,7 @@ public enum Asset: Identifiable, Equatable {
     
     public var shareItem: Any {
         switch self {
-        case .image(let image):
+        case .image(let image, _):
             return image
         case .video(let asset):
             let url = (asset as! AVURLAsset).url

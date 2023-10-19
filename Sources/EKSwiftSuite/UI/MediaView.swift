@@ -59,7 +59,7 @@ public class MediaView: UIView {
         subviews.first?.removeFromSuperview()
         
         switch asset {
-        case .image(let image):
+        case .image(let image, _):
             let imageView = UIImageView(image: image)
             imageView.clipsToBounds = true
             imageView.contentMode = .scaleAspectFill
