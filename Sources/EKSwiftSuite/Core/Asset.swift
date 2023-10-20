@@ -8,6 +8,7 @@
 #if !os(macOS)
 import UIKit
 import AVFoundation
+import Photos
 
 enum MediaType {
     case photo
@@ -27,7 +28,7 @@ enum MediaType {
 }
 
 public enum Asset: Identifiable, Equatable {
-    case image(UIImage, URL)
+    case image(UIImage, PHAsset?)
     case video(AVAsset)
     
     public var id: String {
