@@ -54,7 +54,7 @@ public extension Gradient {
         case vertical, horizontal, diagonalLTR, diagonalRTL
         case custom((CGPoint, CGPoint))
         
-        var points: (start: CGPoint, end: CGPoint) {
+        public var points: (start: CGPoint, end: CGPoint) {
             switch self {
                 case .vertical:
                     return (CGPoint(x: 0.5, y: 0.0), CGPoint(x: 0.5, y: 1.0))
