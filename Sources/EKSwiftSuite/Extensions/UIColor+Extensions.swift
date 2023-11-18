@@ -87,11 +87,11 @@ public extension Color {
             a = CGFloat(rgb & 0x000000FF) / 255.0
             
         } else {
-            self.init(displayP3Red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
+            self.init(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
             return
         }
         
-        self.init(displayP3Red: r, green: g, blue: b, alpha: a)
+        self.init(red: r, green: g, blue: b, alpha: a)
     }
     
 }
