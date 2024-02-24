@@ -26,6 +26,16 @@ open class PlayerView: UIView {
         }
     }
     
+    public var isPlaying = true {
+        didSet {
+            if isPlaying {
+                player?.play()
+            } else {
+                player?.pause()
+            }
+        }
+    }
+    
     public var player: AVQueuePlayer? {
         get {
             return playerLayer?.player as? AVQueuePlayer
