@@ -28,7 +28,15 @@ extension UIActivityIndicatorView: LoadingAnimateable { }
 
 @available(iOS 13, *)
 public extension UILoadable where Self: UIViewController {
+    var isDisplayingLoadingOverlay: Bool {
+        return (presentedViewController as? LoadingViewController) != nil || children.first(where: { $0 is LoadingViewController }) != nil
+    }
+    
     func startLoadingOverlay(inside subview: UIView? = nil, animated: Bool = true, duration: TimeInterval = 0.2) {
+        guard isDisplayingLoadingOverlay == false else {
+            return
+        }
+        
         if let subview = subview, subview.isDescendant(of: view) {
             subview.isUserInteractionEnabled = false
             let loadingViewController = LoadingViewController(configuration: loadingConfiguration)
