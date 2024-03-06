@@ -65,8 +65,8 @@ open class LoadingViewController: UIViewController {
         view.backgroundColor = appearance.backgroundStyle.color.withAlphaComponent(appearance.backgroundOpaqueness)
         animateable.startAnimating()
         
-        if case .blur = appearance.backgroundStyle {
-            let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        if case .blur(let blurEffectStyle, _) = appearance.backgroundStyle {
+            let blurEffect = UIBlurEffect(style: blurEffectStyle)
             let blurView = UIVisualEffectView(effect: blurEffect)
             view.insertSubview(blurView, at: 0)
             blurView.bindMarginsToSuperview()
@@ -94,11 +94,11 @@ public extension LoadingViewController {
     
     enum BackgroundStyle {
         case color(UIColor)
-        case blur(UIColor)
+        case blur(UIBlurEffect.Style, UIColor)
          
         var color: UIColor {
             switch self {
-                case .color(let color), .blur(let color):
+                case .color(let color), .blur(_, let color):
                     return color
             }
         }
