@@ -9,7 +9,7 @@
 
 import UIKit
 
-public struct Gradient: Equatable, Decodable {
+public struct Gradient: Equatable, Codable {
     public var direction: Direction
     public var colors: [UIColor]
     public var locations: [NSNumber]?
@@ -23,6 +23,15 @@ public struct Gradient: Equatable, Decodable {
         colors = colorStrings.map { UIColor(hex: $0) }
         
         locations = nil
+    }
+    
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(direction, forKey: .direction)
+        
+        let colorStrings = colors.map { $0.toHex() }
+        try container.encode(colorStrings, forKey: .colors)
     }
     
     public init(direction: Direction, colors: [UIColor], locations: [NSNumber]? = nil) {
@@ -50,7 +59,7 @@ public struct Gradient: Equatable, Decodable {
 }
 
 public extension Gradient {
-    enum Direction: Equatable, Decodable {
+    enum Direction: Equatable, Codable {
         public static func == (lhs: Gradient.Direction, rhs: Gradient.Direction) -> Bool {
             switch (lhs, rhs) {
             case (.vertical, .vertical):
@@ -83,6 +92,20 @@ public extension Gradient {
                 self = .diagonalRTL
             default:
                 self = .horizontal
+            }
+        }
+        
+        public func encode(to encoder: any Encoder) throws {
+            var container = encoder.singleValueContainer()
+            switch self {
+            case .vertical:
+                try container.encode("vertical")
+            case .horizontal, .custom:
+                try container.encode("horizontal")
+            case .diagonalLTR:
+                try container.encode("diagonalLTR")
+            case .diagonalRTL:
+                try container.encode("diagonalRTL")
             }
         }
         
