@@ -9,7 +9,7 @@
 
 import UIKit
 
-public struct Gradient: Hashable, Decodable {
+public struct Gradient: Hashable, Codable {
     public var direction: Direction
     public var colors: [UIColor]
     public var locations: [NSNumber]?
@@ -42,6 +42,15 @@ public struct Gradient: Hashable, Decodable {
         ])
     }
     
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(direction, forKey: .direction)
+        
+        let colorStrings = colors.map { $0.toHex() }
+        try container.encode(colorStrings, forKey: .colors)
+    }
+    
     private enum CodingKeys: String, CodingKey {
         case direction
         case colors
@@ -50,7 +59,7 @@ public struct Gradient: Hashable, Decodable {
 }
 
 public extension Gradient {
-    enum Direction: Hashable, Decodable {
+    enum Direction: Hashable, Codable {
         public static func == (lhs: Gradient.Direction, rhs: Gradient.Direction) -> Bool {
             switch (lhs, rhs) {
             case (.vertical, .vertical):
@@ -83,6 +92,20 @@ public extension Gradient {
                 self = .diagonalRTL
             default:
                 self = .horizontal
+            }
+        }
+        
+        public func encode(to encoder: any Encoder) throws {
+            var container = encoder.singleValueContainer()
+            switch self {
+            case .vertical:
+                try container.encode("vertical")
+            case .horizontal, .custom:
+                try container.encode("horizontal")
+            case .diagonalLTR:
+                try container.encode("diagonalLTR")
+            case .diagonalRTL:
+                try container.encode("diagonalRTL")
             }
         }
         
